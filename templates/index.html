@@ -1,20 +1,28 @@
 <html>
 <body>
-<header>
-    <h1>Index Page for Book Catalog</h1>
-</header>
-    <ul>
-    {% for book in books %}
+    <header>
+        <h1>Index Page for Book Catalog</h1>
+    </header>
 
-        <li>{{ book.title }} - {{ book.author }}</li>
+    <h2>List of Categories</h2>
 
-    {% endfor %}
+        <ul>
+        {% for category in categories %}
 
+            <li>{{ category.name }}</li>
 
+        {% endfor %}
+        </ul>
 
+    <h2>List of Books</h2>
 
+        <ul>
+        {% for book in books %}
 
+            <li>{{ book.title }} - {{ book.author }}</li>
 
+        {% endfor %}
+        </ul>
 
 </body>
 

@@ -3,7 +3,7 @@ app = Flask(__name__)
 
 from sqlalchemy import create_engine, func, update
 from sqlalchemy.orm import sessionmaker
-from book_db_setup import Base, Category, Book
+from db_setup import Base, Category, Book
 
 engine = create_engine('sqlite:///books.db')
 Base.metadata.bind = engine
@@ -20,7 +20,8 @@ session = DBSession()
 def indexPage():
     """ Shows a list of books """
     books = session.query(Book).order_by(Book.title)
-    return render_template('index.html', books = books)
+    categories = session.query(Category)
+    return render_template('index.html', books = books, categories = categories)
 
 # category stuff
 
