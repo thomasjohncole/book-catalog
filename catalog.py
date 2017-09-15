@@ -27,6 +27,7 @@ def indexPage():
 
 @app.route('/categories/create', methods=['GET','POST'])
 def createCategory():
+    """ Create a new category """
     if request.method == 'POST':
         new_category = Category(name = request.form['category_name'])
         session.add(new_category)
@@ -38,6 +39,7 @@ def createCategory():
 
 @app.route('/categories/<int:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
+    """ Edit the name of an existing category """
     category = session.query(Category).filter_by(id = category_id).one()
 
     if request.method == 'POST':
@@ -51,6 +53,7 @@ def editCategory(category_id):
 
 @app.route('/categories/<int:category_id>/delete', methods=['GET', 'POST'])
 def deleteCategory(category_id):
+    """ Delete an existing category """
     category = session.query(Category).filter_by(id = category_id).one()
 
     if request.method == 'POST':
@@ -65,13 +68,28 @@ def deleteCategory(category_id):
 
 @app.route('/categories/<int:category_id>/books')
 def listBooks(category_id):
+    """ List books for a particular category """
     category = session.query(Category).filter_by(id = category_id).one()
     books = session.query(Book).filter_by(category_id = category_id)
     return render_template('books_by_category.html', books = books, category = category)
 
-@app.route('/categories/books/create')
+@app.route('/categories/books/create', methods=['GET', 'POST'])
 def createBook():
-    return "This is the page to create a new book!"
+    """ Create a new book """
+    if request.method == 'POST':
+        new_book = Book(title = request.form['title'],
+                        subtitle = request.form['subtitle'],
+                        author = request.form['author'],
+                        author2 = request.form['author2'],
+                        description = request.form['description'],
+                        category_id = request.form['category_id']
+                           )
+        session.add(new_book)
+        session.commit()
+        return redirect(url_for('indexPage'))
+    else:
+        return render_template('create_book.html')
+
 
 @app.route('/categories/books/edit')
 def editBooks():

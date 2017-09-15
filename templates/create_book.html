@@ -1,0 +1,17 @@
+<html>
+<body>
+    <h1>Create a New Book</h1>
+
+    <form method='POST' action="{{ url_for('createBook') }}">
+        <p>Book Title:<input type='text' name='title' size='35'></p>
+        <p>Book Subtitle:<input type='text' name='subtitle' size='35'></p>
+        <p>Author:<input type='text' name='author' size='35'></p>
+        <p>Second Author:<input type='text' name='author2' size='35'></p>
+        <p>Description:<input type='text' name='description' size='55'></p>
+        <p>Category ID:<input type='text' name='category_id' size='35'></p>
+
+        <button type="submit">Create</button>
+    </form>
+
+</body>
+</html>
