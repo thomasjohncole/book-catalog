@@ -9,7 +9,7 @@
         <ul>
         {% for category in categories %}
 
-            <li>{{ category.name }}</li>
+            <li><a href="{{ url_for('listBooks', category_id = category.id) }}">{{ category.name }}</a></li>
 
         {% endfor %}
         </ul>

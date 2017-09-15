@@ -25,10 +25,6 @@ def indexPage():
 
 # category stuff
 
-@app.route('/categories')
-def listCategories():
-    return "This is the page which lists all the categories!"
-
 @app.route('/categories/create')
 def createCategory():
     return "This is the page to create a new category!"
@@ -43,9 +39,11 @@ def deleteCategory():
 
 # book stuff
 
-@app.route('/categories/books')
-def listBooks():
-    return "This is page which lists the books within a category!"
+@app.route('/categories/<int:category_id>/books')
+def listBooks(category_id):
+    category = session.query(Category).filter_by(id = category_id).one()
+    books = session.query(Book).filter_by(category_id = category_id)
+    return render_template('books_by_category.html', books = books, category = category)
 
 @app.route('/categories/books/create')
 def createBook():

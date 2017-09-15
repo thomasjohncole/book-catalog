@@ -1,0 +1,9 @@
+<h2>List of Books for Category: {{ category.name }}</h2>
+
+        <ul>
+        {% for book in books %}
+
+            <li>{{ book.title }} - {{ book.author }}</li>
+
+        {% endfor %}
+        </ul>
