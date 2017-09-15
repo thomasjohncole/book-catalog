@@ -18,16 +18,23 @@ session = DBSession()
 
 @app.route('/')
 def indexPage():
-    """ Shows a list of books """
+    """ Shows a list of categories of books and a list of books """
     books = session.query(Book).order_by(Book.title)
     categories = session.query(Category)
     return render_template('index.html', books = books, categories = categories)
 
 # category stuff
 
-@app.route('/categories/create')
+@app.route('/categories/create', methods=['GET','POST'])
 def createCategory():
-    return "This is the page to create a new category!"
+    if request.method == 'POST':
+        new_category = Category(name = request.form['category_name'])
+        session.add(new_category)
+        session.commit()
+        return redirect(url_for('indexPage'))
+    else:
+        return render_template('create_category.html')
+
 
 @app.route('/categories/edit')
 def editCategory():

@@ -5,6 +5,7 @@
     </header>
 
     <h2>List of Categories</h2>
+    <a href="{{ url_for('createCategory') }}">create new category</a>
 
         <ul>
         {% for category in categories %}
