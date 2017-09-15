@@ -1,0 +1,17 @@
+<html>
+<body>
+
+    <div class='header'>
+        <h1>Are you sure you want to delete the category "{{ category.name }}" from the list?</h1>
+    </div>
+
+    <div class='content'>
+        <form method='POST' action="{{ url_for('deleteCategory', category_id = category.id) }}">
+
+            <button type='submit'>WHY YES, YES I WOULD!</button>
+
+        </form>
+    </div>
+
+</body>
+</html>

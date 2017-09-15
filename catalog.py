@@ -40,9 +40,17 @@ def createCategory():
 def editCategory():
     return "This is the page to edit a category!"
 
-@app.route('/categories/delete')
-def deleteCategory():
-    return "This is the page to delete a category!"
+@app.route('/categories/<int:category_id>/delete', methods=['GET', 'POST'])
+def deleteCategory(category_id):
+    category = session.query(Category).filter_by(id = category_id).one()
+
+    if request.method == 'POST':
+        session.delete(category)
+        session.commit()
+        return redirect(url_for('indexPage'))
+    else:
+        return render_template('delete_category.html', category = category)
+
 
 # book stuff
 
