@@ -1,0 +1,11 @@
+<html>
+<body>
+    <h1>Edit the Category {{ category.name }}</h1>
+
+    <form method = 'POST' action = "{{ url_for('editCategory', category_id = category.id )}}" >
+
+        <p>Edit Category Name:<input type='text' name='category_name' size='35' value='{{ category.name }}'></p>
+
+        <button type='submit'>Submit Edit</button>
+
+    </form>
