@@ -21,7 +21,7 @@
         <table>
         {% for book in books %}
 
-            <tr><td><a href="#">{{ book.title }} - {{ book.author }}</a></td><td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete</a></td></tr>
+            <tr><td><a href="{{ url_for('singleBook', book_id = book.id) }}">{{ book.title }} - {{ book.author }}</a></td><td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete</a></td></tr>
 
         {% endfor %}
         </table>
