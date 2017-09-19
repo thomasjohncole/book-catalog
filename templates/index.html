@@ -19,9 +19,18 @@
     <p><a href="{{ url_for('createBook') }}">create new book</a></p>
 
         <table>
+        <th>Title</th><th>Author</th><th>Category</th>
         {% for book in books %}
 
-            <tr><td><a href="{{ url_for('singleBook', book_id = book.id) }}">{{ book.title }} - {{ book.author }}</a></td><td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete</a></td></tr>
+            <tr><td><a href="{{ url_for('singleBook', book_id = book.id) }}">{{ book.title }}</a></td><td>{{ book.author }}</td>
+
+            {% for category in categories %}
+            {%  if category.id == book.category_id %}
+            <td>{{ category.name }}</td>
+            {% endif %}
+            {% endfor %}
+
+            <td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete</a></td></tr>
 
         {% endfor %}
         </table>

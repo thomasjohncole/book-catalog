@@ -76,7 +76,8 @@ def listBooks(category_id):
 @app.route('/categories/books/<int:book_id>')
 def singleBook(book_id):
     book = session.query(Book).filter_by(id = book_id).one()
-    return render_template('single_book.html', book = book)
+    categories = session.query(Category)
+    return render_template('single_book.html', book = book, categories = categories)
 
 
 @app.route('/categories/books/create', methods=['GET', 'POST'])
