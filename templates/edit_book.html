@@ -1,0 +1,17 @@
+<html>
+<body>
+    <h1>Edit Book Info for {{ book.name }}</h1>
+
+    <form method='POST' action="{{ url_for('editBook', book_id = book.id) }}">
+        <p>Book Title:<input type='text' name='title' size='35' value='{{ book.title }}'></p>
+        <p>Book Subtitle:<input type='text' name='subtitle' size='35' value='{{ book.subtitle }}'></p>
+        <p>Author:<input type='text' name='author' size='35' value='{{ book.author }}'></p>
+        <p>Second Author:<input type='text' name='author2' size='35' value='{{ book.author2 }}'></p>
+        <p>Description:<input type='text' name='description' size='55' value='{{ book.description }}'></p>
+        <p>Category ID:<input type='text' name='category_id' size='35' value='{{ book.category_id }}'></p>
+
+        <button type="submit">Edit</button>
+    </form>
+
+</body>
+</html>

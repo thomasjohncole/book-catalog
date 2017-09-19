@@ -73,6 +73,7 @@ def listBooks(category_id):
     books = session.query(Book).filter_by(category_id = category_id)
     return render_template('books_by_category.html', books = books, category = category)
 
+
 @app.route('/categories/books/create', methods=['GET', 'POST'])
 def createBook():
     """ Create a new book """
@@ -91,9 +92,24 @@ def createBook():
         return render_template('create_book.html')
 
 
-@app.route('/categories/books/edit')
-def editBooks():
-    return "This is the page to edit info for an existing book!"
+@app.route('/categories/books/<int:book_id>/edit', methods=['GET', 'POST'])
+def editBook(book_id):
+    """ Edit an existing book """
+    book = session.query(Book).filter_by(id = book_id).one()
+
+    if request.method == 'POST':
+        edit_book = ({'title': request.form['title'],
+                      'subtitle': request.form['subtitle'],
+                      'author':request.form['author'],
+                      'author2': request.form['author2'],
+                      'description': request.form['description'],
+                      'category_id': request.form['category_id']}
+                           )
+        session.query(Book).filter_by(id = book_id).update(edit_book)
+        session.commit()
+        return redirect(url_for('indexPage'))
+    else:
+        return render_template('edit_book.html', book = book)
 
 @app.route('/categories/books/delete')
 def deleteBook():
