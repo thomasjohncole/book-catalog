@@ -111,9 +111,18 @@ def editBook(book_id):
     else:
         return render_template('edit_book.html', book = book)
 
-@app.route('/categories/books/delete')
-def deleteBook():
-    return "This is the page to delete a book from the db!"
+@app.route('/categories/books/<int:book_id>/delete', methods=['GET', 'POST'])
+def deleteBook(book_id):
+    """ Delete a book and make it go bye bye """
+    book = session.query(Book).filter_by(id = book_id).one()
+
+    if request.method == 'POST':
+        session.delete(book)
+        session.commit()
+        return redirect(url_for('indexPage'))
+    else:
+        return render_template('delete_book.html', book = book)
+
 
 # Oauth stuff
 

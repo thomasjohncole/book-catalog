@@ -1,0 +1,17 @@
+<html>
+<body>
+
+    <div class='header'>
+        <h1>Are you sure you want to delete the book "{{ book.title }}" from the list?</h1>
+    </div>
+
+    <div class='content'>
+        <form method='POST' action="{{ url_for('deleteBook', book_id = book.id) }}">
+
+            <button type='submit'>WHY YES, YES I WOULD!</button>
+
+        </form>
+    </div>
+
+</body>
+</html>
