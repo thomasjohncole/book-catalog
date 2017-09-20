@@ -83,6 +83,7 @@ def singleBook(book_id):
 @app.route('/categories/books/create', methods=['GET', 'POST'])
 def createBook():
     """ Create a new book """
+    categories = session.query(Category)
     if request.method == 'POST':
         new_book = Book(title = request.form['title'],
                         subtitle = request.form['subtitle'],
@@ -95,14 +96,14 @@ def createBook():
         session.commit()
         return redirect(url_for('indexPage'))
     else:
-        return render_template('create_book.html')
+        return render_template('create_book.html', categories = categories)
 
 
 @app.route('/categories/books/<int:book_id>/edit', methods=['GET', 'POST'])
 def editBook(book_id):
     """ Edit an existing book """
     book = session.query(Book).filter_by(id = book_id).one()
-
+    categories = session.query(Category)
     if request.method == 'POST':
         edit_book = ({'title': request.form['title'],
                       'subtitle': request.form['subtitle'],
@@ -115,7 +116,7 @@ def editBook(book_id):
         session.commit()
         return redirect(url_for('indexPage'))
     else:
-        return render_template('edit_book.html', book = book)
+        return render_template('edit_book.html', book = book, categories = categories)
 
 @app.route('/categories/books/<int:book_id>/delete', methods=['GET', 'POST'])
 def deleteBook(book_id):

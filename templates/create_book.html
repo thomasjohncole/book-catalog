@@ -8,7 +8,12 @@
         <p>Author:<input type='text' name='author' size='35'></p>
         <p>Second Author:<input type='text' name='author2' size='35'></p>
         <p>Description:<input type='text' name='description' size='55'></p>
-        <p>Category ID:<input type='text' name='category_id' size='35'></p>
+        <p>Category:<select name='category_id'>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select></p>
+        <p>If your book doesn't match an existing category, <a href="{{url_for('createCategory')}}">create the category first</a></p>
 
         <button type="submit">Create</button>
     </form>
