@@ -1,21 +1,32 @@
-<html>
-<body>
-    <h1>Display Book Info for {{ book.title }}</h1>
+{% extends 'bootstrap/base.html' %}
+
+{% block navbar %}
+<div class="navbar navbar-default">
+    <div class='container'>
+        <h1><span class="glyphicon glyphicon-book"></span>   Book Catalog 2017</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class='container'>
 
     <h1>{{ book.title }}</h1>
-    <p><i>{{ book.subtitle if book.subtitle is not none }}</i></p>
-    <p>By {{ book.author }}</p>
+    <p class='lead'><em>{{ book.subtitle if book.subtitle is not none }}</em></p>
+    <p>By <strong>{{ book.author }}</strong></p>
     <p>{{ book.author2 if book.author2 is not none }}</p>
-    <p>Description - {{ book.description }}</p>
+    <blockquote><p><em>{{ book.description }}</em></p></blockquote>
 
-
+    <dl class="dl-horizontal">
     {% for category in categories %}
         {%  if category.id == book.category_id %}
-            <p>Category - {{ category.name }}</p>
+            <dt>Category</dt><dd><a href="{{ url_for('listBooks', category_id = category.id) }}">{{ category.name }}</a></dd>
         {% endif %}
     {% endfor %}
+    </dl>
+
+</div>
+{% endblock %}
 
 
 
-</body>
-</html>
