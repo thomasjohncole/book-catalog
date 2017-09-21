@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from flask_bootstrap import Bootstrap
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+Bootstrap(app)
 
 from sqlalchemy import create_engine, func, update
 from sqlalchemy.orm import sessionmaker
