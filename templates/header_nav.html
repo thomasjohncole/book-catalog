@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+                <div class="col-xs-2 col-sm-1 h1"><a href="{{url_for('indexPage') }}"><span class="glyphicon glyphicon-book"></span></a></div>
+                <div class="col-xs-10"><h1>Book Catalog 2017</h1></div>
+    </div>
+</div>
+
+<nav class="navbar navbar-inverse bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6 text-right">
+                <a class="btn btn-primary navbar-btn" href="{{ url_for('createCategory') }}">New Category</a>
+
+                <a class="btn btn-primary navbar-btn" href="{{ url_for('createBook') }}">New Book</a>
+
+                <a class="btn btn-primary navbar-btn" href="#">Log In</a>
+            </div>
+        </div>
+    </div>
+</nav>
