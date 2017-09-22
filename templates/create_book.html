@@ -1,5 +1,9 @@
-<html>
-<body>
+{% extends 'bootstrap/base.html' %}
+
+{% block navbar %}{% include 'header_nav.html' %}{% endblock %}
+
+{% block content %}
+
     <h1>Create a New Book</h1>
 
     <form method='POST' action="{{ url_for('createBook') }}">
@@ -18,5 +22,4 @@
         <button type="submit">Create</button>
     </form>
 
-</body>
-</html>
+{% endblock %}
