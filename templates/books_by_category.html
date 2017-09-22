@@ -1,12 +1,6 @@
 {% extends 'bootstrap/base.html' %}
 
-{% block navbar %}
-<div class="navbar navbar-default">
-    <div class='container'>
-        <h1><span class="glyphicon glyphicon-book"></span>   Book Catalog 2017</h1>
-    </div>
-</div>
-{% endblock %}
+{% block navbar %}{% include 'header_nav.html' %}{% endblock %}
 
 {% block content %}
 <div class='container'>
