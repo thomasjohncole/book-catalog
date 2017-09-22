@@ -1,22 +1,14 @@
 {% extends 'bootstrap/base.html' %}
 
-{% block navbar %}
-<div class="navbar navbar-default">
-    <div class='container'>
-        <h1><span class="glyphicon glyphicon-book"></span>   Book Catalog 2017</h1>
-    </div>
-</div>
-{% endblock %}
+{% block navbar %}{% include 'header_nav.html' %}{% endblock %}
 
 {% block content %}
 <div class='container'>
-
     <h1>{{ book.title }}</h1>
     <p class='lead'><em>{{ book.subtitle if book.subtitle is not none }}</em></p>
     <p>By <strong>{{ book.author }}</strong></p>
     <p>{{ book.author2 if book.author2 is not none }}</p>
     <blockquote><p><em>{{ book.description }}</em></p></blockquote>
-
     <dl class="dl-horizontal">
     {% for category in categories %}
         {%  if category.id == book.category_id %}
@@ -24,7 +16,6 @@
         {% endif %}
     {% endfor %}
     </dl>
-
 </div>
 {% endblock %}
 
