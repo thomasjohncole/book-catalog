@@ -20,6 +20,27 @@
     <td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit Book Info</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete Book</a></td></tr>
     </table>
 
+    {% set titles_length = titles|length %}
+
+    {% if book.id < titles_length %}
+        {% set next_id = book.id + 1 %}
+    {% else %}
+        {% set next_id = titles[0][0] %}
+    {% endif %}
+
+    {% if book.id != titles[0][0] %}
+        {% set prev_id = book.id - 1 %}
+    {% else %}
+        {% set prev_id = titles[titles_length-1][0] %}
+    {% endif %}
+
+    <div class="btn-group" role="group">
+        <a class="btn btn-primary" href="{{ url_for('singleBook', book_id = prev_id )}}">PREV</a>
+        <a class="btn btn-primary" href="{{ url_for('singleBook', book_id = next_id )}}">NEXT</a>
+    </div>
+
+
+
 </div>
 {% endblock %}
 
