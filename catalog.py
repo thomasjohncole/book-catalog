@@ -22,10 +22,13 @@ session = DBSession()
 @app.route('/')
 def indexPage():
     """ Shows a list of categories of books and a list of books """
-    books = session.query(Book, func.count(Book.category_id).label("count")).group_by(Book.category_id).all()
-    # books = session.query(Book).order_by(Book.title)
-    categories = session.query(Category)
-    return render_template('index.html', books = books, categories = categories)
+    books = session.query(Book).order_by(Book.title)
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .join(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        )
+    return render_template('index.html',books = books, category_counts = category_counts)
 
 # category stuff
 
@@ -88,6 +91,7 @@ def singleBook(book_id):
 def createBook():
     """ Create a new book """
     categories = session.query(Category)
+
     if request.method == 'POST':
         new_book = Book(title = request.form['title'],
                         subtitle = request.form['subtitle'],
@@ -108,6 +112,7 @@ def editBook(book_id):
     """ Edit an existing book """
     book = session.query(Book).filter_by(id = book_id).one()
     categories = session.query(Category)
+
     if request.method == 'POST':
         edit_book = ({'title': request.form['title'],
                       'subtitle': request.form['subtitle'],
@@ -154,14 +159,6 @@ def indexPageJSON():
 @app.route('/categories/books/JSON')
 def listBooksJSON():
     return "This is the JSON data for the books list page for a particular category!"
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
