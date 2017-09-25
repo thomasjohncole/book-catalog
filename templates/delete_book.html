@@ -1,3 +1,32 @@
+{% extends "bootstrap/base.html" %}
+
+{% block navbar %}{% include "header_nav.html" %}{% endblock %}
+
+{% block content %}
+
+<div class="container well">
+
+    <h2>Delete Book: {{ book.title }}</h2>
+
+    <div class="alert alert-danger" role="alert">Are you sure you want to delete the book <strong>{{ book.title }}</strong> from the list?</div>
+
+    <form class="form-horizontal" method="POST" action="{{ url_for('deleteBook', book_id = book.id) }}">
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Why Yes, Yes I Would!</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
+
+
+
+
+
 <html>
 <body>
 

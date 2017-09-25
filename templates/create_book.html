@@ -54,7 +54,8 @@
                     {% endfor %}
                 </select>
 
-                <span id="helpBlock" class="help-block">If your book doesn't match an existing category, <a href="{{url_for('createCategory')}}">create the category first</a></span>
+                <div class="alert alert-info" role="alert"><span id="helpBlock" class="help-block">If your book doesn't match an existing category, <a href="{{url_for('createCategory')}}">create the category first</a></span></div>
+
             </div>
         </div>
 

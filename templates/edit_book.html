@@ -6,7 +6,7 @@
 
 <div class="container well">
 
-    <h2>Edit Book Info for {{ book.name }}</h2>
+    <h2>Edit Book Info for: {{ book.title }}</h2>
 
     <form class="form-horizontal" method="POST" action="{{ url_for('editBook', book_id = book.id) }}">
 
