@@ -16,6 +16,10 @@
         {% endif %}
     {% endfor %}
     </dl>
+    <table class='table'>
+    <td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit Book Info</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete Book</a></td></tr>
+    </table>
+
 </div>
 {% endblock %}
 
