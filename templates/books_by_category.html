@@ -8,10 +8,10 @@
     <h2>{{ category.name }} Books</h2>
 
             <table class='table table-striped table-condensed'>
-            <th>Title</th><th>Author</th><th>Category</th>
+            <th>Title</th><th>Author</th><th>Category</th><th>Count</th>
             {% for book in books %}
 
-                <tr><td><a href="{{ url_for('singleBook', book_id = book.id) }}">{{ book.title }}</a></td><td>{{ book.author }}</td><td>{{ category.name }}</td>
+                <tr><td><a href="{{ url_for('singleBook', book_id = book.id) }}">{{ book.title }}</a></td><td>{{ book.author }}</td><td>{{ category.name }}</td><td>{{book.count}}</td>
                 <td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete</a></td></tr>
 
             {% endfor %}

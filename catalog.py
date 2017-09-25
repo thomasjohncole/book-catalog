@@ -22,7 +22,8 @@ session = DBSession()
 @app.route('/')
 def indexPage():
     """ Shows a list of categories of books and a list of books """
-    books = session.query(Book).order_by(Book.title)
+    books = session.query(Book, func.count(Book.category_id).label("count")).group_by(Book.category_id).all()
+    # books = session.query(Book).order_by(Book.title)
     categories = session.query(Category)
     return render_template('index.html', books = books, categories = categories)
 
@@ -117,7 +118,7 @@ def editBook(book_id):
                            )
         session.query(Book).filter_by(id = book_id).update(edit_book)
         session.commit()
-        return redirect(url_for('indexPage'))
+        return redirect(url_for('singleBook', book_id = book_id))
     else:
         return render_template('edit_book.html', book = book, categories = categories)
 
