@@ -4,69 +4,73 @@
 
 {% block content %}
 <div class='container'>
-    <h1>{{ book.title }}</h1>
-    <p class='lead'><em>{{ book.subtitle if book.subtitle is not none }}</em></p>
-    <p>By <strong>{{ book.author }}</strong></p>
-    <p>{{ book.author2 if book.author2 is not none }}</p>
-    <blockquote><p><em>{{ book.description }}</em></p></blockquote>
-    <dl class="dl-horizontal">
-    {% for category in categories %}
-        {%  if category.id == book.category_id %}
-            <dt>Category</dt><dd><a href="{{ url_for('listBooks', category_id = category.id) }}">{{ category.name }}</a></dd>
-        {% endif %}
-    {% endfor %}
-    </dl>
-    <table class='table'>
-    <td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit Book Info</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete Book</a></td></tr>
-    </table>
+    <div class='row'>
+        <div class='col-md-6'>
+            <h1>{{ book.title }}</h1>
+            <p class='lead'><em>{{ book.subtitle if book.subtitle is not none }}</em></p>
+            <p>By <strong>{{ book.author }}</strong></p>
+            <p>{{ book.author2 if book.author2 is not none }}</p>
+            <blockquote><p><em>{{ book.description }}</em></p></blockquote>
+            <dl class="dl-horizontal">
+            {% for category in categories %}
+                {%  if category.id == book.category_id %}
+                    <dt>Category</dt><dd><a href="{{ url_for('listBooks', category_id = category.id) }}">{{ category.name }}</a></dd>
+                {% endif %}
+            {% endfor %}
+            </dl>
+            <table class='table'>
+            <td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit Book Info</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete Book</a></td></tr>
+            </table>
 
-    <!--- hackey way to get a prev and next button to paginate alphabetically by title...
+            <!--- hackey way to get a prev and next button to paginate alphabetically by title...
 
-    Jinja's variable scope doesn't extend outside the for loop, but you can use an array
-    and append it. The new_book_id is set to an empty array first, and then we iterate through the
-    sorted list of book.id values until we find the current book id. The loop.index keeps
-    track of the iterations of the for loop, so we can use loop.index to keep track of the
-    list position. If we're at the end of the list we just assign new_book_id the value of
-    the first list position, id_list[0]. If we're not at the end of the list, we can use
-    the loop.index of the id_list to assign new_book_id the value in the next position in
-    the list.  -->
-    {% set new_book_id = [] %}
-    {% for x in id_list %}
+            Jinja's variable scope doesn't extend outside the for loop, but you can use an array
+            and append it. The new_book_id is set to an empty array first, and then we iterate through the
+            sorted list of book.id values until we find the current book id. The loop.index keeps
+            track of the iterations of the for loop, so we can use loop.index to keep track of the
+            list position. If we're at the end of the list we just assign new_book_id the value of
+            the first list position, id_list[0]. If we're not at the end of the list, we can use
+            the loop.index of the id_list to assign new_book_id the value in the next position in
+            the list.  -->
+            {% set new_book_id = [] %}
+            {% for x in id_list %}
 
-        {% if x == book.id %}
-            {% if loop.index == id_list|length %}
-                {% if new_book_id.append(id_list[0]) %}{% endif %}
-            {% else %}
-                {% if new_book_id.append(id_list[loop.index]) %}{% endif %}
-            {% endif %}
-        {% endif %}
+                {% if x == book.id %}
+                    {% if loop.index == id_list|length %}
+                        {% if new_book_id.append(id_list[0]) %}{% endif %}
+                    {% else %}
+                        {% if new_book_id.append(id_list[loop.index]) %}{% endif %}
+                    {% endif %}
+                {% endif %}
 
-    {% endfor %}
-    {% set new_book_id = new_book_id[0] %}
+            {% endfor %}
+            {% set new_book_id = new_book_id[0] %}
 
-    <!--- Similar logic applies below, we're just going in the opposite direction to derive
-    the prev_book_id value. Start with the empty array again, and then find the current book
-    id.This time we check and see if we're at the first value of the list, in which case we go
-    to the end, if not we just decrement the list position. We use -2 to decrement, because
-    loop.index starts with 1, whereas the list position starts with 0.   -->
-    {% set prev_book_id = [] %}
-    {% for x in id_list %}
-        {% if x == book.id %}
+            <!--- Similar logic applies below, we're just going in the opposite direction to derive
+            the prev_book_id value. Start with the empty array again, and then find the current book
+            id.This time we check and see if we're at the first value of the list, in which case we go
+            to the end, if not we just decrement the list position. We use -2 to decrement, because
+            loop.index starts with 1, whereas the list position starts with 0.   -->
+            {% set prev_book_id = [] %}
+            {% for x in id_list %}
+                {% if x == book.id %}
 
-            {% if loop.index == 1 %}
-                {% if prev_book_id.append(id_list[id_list|length - 1]) %}{% endif %}
-            {% else %}
-                {% if prev_book_id.append(id_list[loop.index -2]) %}{% endif %}
-            {% endif %}
+                    {% if loop.index == 1 %}
+                        {% if prev_book_id.append(id_list[id_list|length - 1]) %}{% endif %}
+                    {% else %}
+                        {% if prev_book_id.append(id_list[loop.index -2]) %}{% endif %}
+                    {% endif %}
 
-        {% endif %}
+                {% endif %}
 
-    {% endfor %}
-    {% set prev_book_id = prev_book_id[0] %}
+            {% endfor %}
+            {% set prev_book_id = prev_book_id[0] %}
 
-    <div class="btn-group" role="group">
-        <a class="btn btn-primary" href="{{ url_for('singleBook', book_id = prev_book_id )}}">PREV</a>
-        <a class="btn btn-primary" href="{{ url_for('singleBook', book_id = new_book_id )}}">NEXT</a>
+            <div class="pager">
+                <a class="previous btn btn-primary" href="{{ url_for('singleBook', book_id = prev_book_id )}}">&larr; PREV</a>
+                <a class="next btn btn-primary" href="{{ url_for('singleBook', book_id = new_book_id )}}">NEXT &rarr;</a>
+            </div>
+        </div>
     </div>
 
 </div>
