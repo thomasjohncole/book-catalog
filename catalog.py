@@ -27,6 +27,7 @@ def indexPage():
         session.query(Category.name, Category.id, func.count(Book.title).label("count"))
         .join(Book, Category.id == Book.category_id)
         .group_by(Category.id)
+        .order_by(Category.name)
         )
     return render_template('index.html',books = books, category_counts = category_counts)
 
@@ -84,11 +85,13 @@ def listBooks(category_id):
 def singleBook(book_id):
     book = session.query(Book).filter_by(id = book_id).one()
     categories = session.query(Category)
-
     titles = session.query(Book.id).order_by(Book.title).all()
-    print titles
+    id_list = [x[0] for x in titles]
 
-    return render_template('single_book.html', book = book, categories = categories, titles = titles)
+    return render_template('single_book.html',
+                            book = book,
+                            categories = categories,
+                            id_list = id_list)
 
 
 @app.route('/categories/books/create', methods=['GET', 'POST'])
