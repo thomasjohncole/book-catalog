@@ -8,15 +8,13 @@
 
     <h2>Delete Category: {{ category.name }}</h2>
 
-    <div class="alert alert-danger" role="alert">Are you sure you want to delete the category <strong>{{ category.name }}</strong> from the list?</div>
-
-    <div class="alert alert-danger" role="alert">If any books belong to this category, You will need to reassign them to a new category!</div>
+    <div class="alert alert-danger" role="alert"><p>Are you sure you want to delete the category <strong>{{ category.name }}</strong> from the list?</p><p>If any books belong to this category, You will need to reassign them to a new category!</p></div>
 
     <form class="form-horizontal" method="POST" action="{{ url_for('deleteCategory', category_id = category.id) }}">
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Why Yes, Yes I Would!</button>
+                <button type="submit" class="btn btn-primary">Yes, Delete Category {{category.name }}!</button>
             </div>
         </div>
 

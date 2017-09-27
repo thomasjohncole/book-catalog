@@ -8,6 +8,16 @@
 
     <h2>Edit Book Info for: {{ book.title }}</h2>
 
+    {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes list-unstyled">
+                {% for message in messages %}
+                <li><div class="alert alert-danger" role="alert">{{ message }}</div></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+    {% endwith %}
+
     <form class="form-horizontal" method="POST" action="{{ url_for('editBook', book_id = book.id) }}">
 
         <div class="form-group">

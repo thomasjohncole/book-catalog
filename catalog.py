@@ -138,6 +138,11 @@ def createBook():
                         description = request.form['description'],
                         category_id = request.form['category_id']
                            )
+
+        if not request.form['title'] or not request.form['author']:
+            flash('Please fill out required form fields!')
+            return redirect(url_for('createBook'))
+
         session.add(new_book)
         session.commit()
         return redirect(url_for('indexPage'))
@@ -159,6 +164,12 @@ def editBook(book_id):
                       'description': request.form['description'],
                       'category_id': request.form['category_id']}
                            )
+
+        if not request.form['title'] or not request.form['author']:
+            flash('Please fill out required form fields!')
+            return redirect(url_for('createBook'))
+
+
         session.query(Book).filter_by(id = book_id).update(edit_book)
         session.commit()
         return redirect(url_for('singleBook', book_id = book_id))
