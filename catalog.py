@@ -169,7 +169,6 @@ def editBook(book_id):
             flash('Please fill out required form fields!')
             return redirect(url_for('createBook'))
 
-
         session.query(Book).filter_by(id = book_id).update(edit_book)
         session.commit()
         return redirect(url_for('singleBook', book_id = book_id))
