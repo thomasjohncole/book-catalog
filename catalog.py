@@ -180,13 +180,21 @@ def editBook(book_id):
 def deleteBook(book_id):
     """ Delete a book and make it go bye bye """
     book = session.query(Book).filter_by(id = book_id).one()
+    books = session.query(Book).order_by(Book.title)
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
 
     if request.method == 'POST':
         session.delete(book)
         session.commit()
         return redirect(url_for('indexPage'))
     else:
-        return render_template('delete_book.html', book = book)
+        return render_template('delete_book.html',
+            book = book, books = books, category_counts = category_counts)
 
 
 # Oauth stuff

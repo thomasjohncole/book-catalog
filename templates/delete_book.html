@@ -14,33 +14,31 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Why Yes, Yes I Would!</button>
+                <button type="submit" class="btn btn-primary">Yes, Delete <strong>{{ book.title }}</strong></button>
             </div>
         </div>
 
     </form>
+
+    <table class='table table-striped table-condensed'>
+            <th>Title</th><th>Author</th><th>Category</th>
+            {% for book in books %}
+
+                <tr><td><a href="{{ url_for('singleBook', book_id = book.id) }}">{{ book.title }}</a></td><td>{{ book.author }}</td>
+
+                {% for category in category_counts %}
+                    {%  if category.id == book.category_id %}
+                        <td>{{ category.name }}</td>
+                    {% endif %}
+                {% endfor %}
+
+                <td><a href="{{ url_for('editBook', book_id = book.id) }}">Edit</a></td><td><a href="{{ url_for('deleteBook', book_id = book.id) }}">Delete</a></td></tr>
+
+            {% endfor %}
+            </table>
+
 </div>
 
 {% endblock %}
 
 
-
-
-
-<html>
-<body>
-
-    <div class='header'>
-        <h1>Are you sure you want to delete the book "{{ book.title }}" from the list?</h1>
-    </div>
-
-    <div class='content'>
-        <form method='POST' action="{{ url_for('deleteBook', book_id = book.id) }}">
-
-            <button type='submit'>WHY YES, YES I WOULD!</button>
-
-        </form>
-    </div>
-
-</body>
-</html>
