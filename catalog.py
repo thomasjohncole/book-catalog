@@ -21,11 +21,11 @@ session = DBSession()
 
 @app.route('/')
 def indexPage():
-    """ Shows a list of categories of books and a list of books """
+    """ Shows a list of categories and a list of books """
     books = session.query(Book).order_by(Book.title)
     category_counts = (
         session.query(Category.name, Category.id, func.count(Book.title).label("count"))
-        .join(Book, Category.id == Book.category_id)
+        .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
         )
@@ -36,19 +36,32 @@ def indexPage():
 @app.route('/categories/create', methods=['GET','POST'])
 def createCategory():
     """ Create a new category """
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
+
     if request.method == 'POST':
         new_category = Category(name = request.form['category_name'])
         session.add(new_category)
         session.commit()
         return redirect(url_for('indexPage'))
     else:
-        return render_template('create_category.html')
+        return render_template('create_category.html', category_counts = category_counts)
 
 
 @app.route('/categories/<int:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
     """ Edit the name of an existing category """
     category = session.query(Category).filter_by(id = category_id).one()
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
 
     if request.method == 'POST':
         data = ({"name": request.form['category_name']})
@@ -56,20 +69,28 @@ def editCategory(category_id):
         session.commit()
         return redirect(url_for('indexPage'))
     else:
-        return render_template('edit_category.html' , category = category)
+        return render_template('edit_category.html',
+            category = category, category_counts = category_counts)
 
 
 @app.route('/categories/<int:category_id>/delete', methods=['GET', 'POST'])
 def deleteCategory(category_id):
     """ Delete an existing category """
     category = session.query(Category).filter_by(id = category_id).one()
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
 
     if request.method == 'POST':
         session.delete(category)
         session.commit()
         return redirect(url_for('indexPage'))
     else:
-        return render_template('delete_category.html', category = category)
+        return render_template('delete_category.html',
+            category = category, category_counts = category_counts)
 
 
 # book stuff
@@ -81,7 +102,7 @@ def listBooks(category_id):
     books = session.query(Book).filter_by(category_id = category_id)
     return render_template('books_by_category.html', books = books, category = category)
 
-@app.route('/categories/books/<int:book_id>')
+@app.route('/books/<int:book_id>')
 def singleBook(book_id):
     book = session.query(Book).filter_by(id = book_id).one()
     categories = session.query(Category)
@@ -94,7 +115,7 @@ def singleBook(book_id):
                             id_list = id_list)
 
 
-@app.route('/categories/books/create', methods=['GET', 'POST'])
+@app.route('/books/create', methods=['GET', 'POST'])
 def createBook():
     """ Create a new book """
     categories = session.query(Category)
@@ -114,7 +135,7 @@ def createBook():
         return render_template('create_book.html', categories = categories)
 
 
-@app.route('/categories/books/<int:book_id>/edit', methods=['GET', 'POST'])
+@app.route('/books/<int:book_id>/edit', methods=['GET', 'POST'])
 def editBook(book_id):
     """ Edit an existing book """
     book = session.query(Book).filter_by(id = book_id).one()
@@ -134,7 +155,7 @@ def editBook(book_id):
     else:
         return render_template('edit_book.html', book = book, categories = categories)
 
-@app.route('/categories/books/<int:book_id>/delete', methods=['GET', 'POST'])
+@app.route('/books/<int:book_id>/delete', methods=['GET', 'POST'])
 def deleteBook(book_id):
     """ Delete a book and make it go bye bye """
     book = session.query(Book).filter_by(id = book_id).one()
