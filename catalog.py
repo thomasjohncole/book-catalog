@@ -45,6 +45,10 @@ def createCategory():
 
     if request.method == 'POST':
         new_category = Category(name = request.form['category_name'])
+        if not request.form['category_name']:
+            flash('You must fill out the form! Duh!')
+            return redirect(url_for('createCategory'))
+
         session.add(new_category)
         session.commit()
         return redirect(url_for('indexPage'))
@@ -191,6 +195,7 @@ def listBooksJSON():
 
 if __name__ == '__main__':
     app.debug = True
+    app.secret_key = 'super_secret_key'
     app.run(host = '0.0.0.0', port = 5000)
 
 
