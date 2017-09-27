@@ -45,6 +45,7 @@ def createCategory():
 
     if request.method == 'POST':
         new_category = Category(name = request.form['category_name'])
+
         if not request.form['category_name']:
             flash('You must fill out the form! Duh!')
             return redirect(url_for('createCategory'))
@@ -69,6 +70,11 @@ def editCategory(category_id):
 
     if request.method == 'POST':
         data = ({"name": request.form['category_name']})
+
+        if not request.form['category_name']:
+            flash('Form field cannot be blank!')
+            return redirect(url_for('editCategory', category_id = category_id))
+
         session.query(Category).filter_by(id = category_id).update(data)
         session.commit()
         return redirect(url_for('indexPage'))
