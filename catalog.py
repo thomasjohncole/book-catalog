@@ -78,6 +78,7 @@ def editCategory(category_id):
 
         session.query(Category).filter_by(id = category_id).update(data)
         session.commit()
+        flash("Category: {} edited successfully!".format(category.name))
         return redirect(url_for('indexPage'))
     else:
         return render_template('edit_category.html',
@@ -98,6 +99,7 @@ def deleteCategory(category_id):
     if request.method == 'POST':
         session.delete(category)
         session.commit()
+        flash("Category: {} deleted successfully!".format(category.name))
         return redirect(url_for('indexPage'))
     else:
         return render_template('delete_category.html',
