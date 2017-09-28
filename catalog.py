@@ -105,11 +105,10 @@ def deleteCategory(category_id):
         return render_template('delete_category.html',
             category = category, category_counts = category_counts)
 
-
 # book stuff
 
-@app.route('/categories/<int:category_id>/books')
-def listBooks(category_id):
+@app.route('/categories/<int:category_id>/books-by-category')
+def listBooksByCategory(category_id):
     """ List books for a particular category """
     category = session.query(Category).filter_by(id = category_id).one()
     books = session.query(Book).filter_by(category_id = category_id)
@@ -176,6 +175,7 @@ def editBook(book_id):
 
         session.query(Book).filter_by(id = book_id).update(edit_book)
         session.commit()
+        flash("Book: {} edited successfully!".format(book.title))
         return redirect(url_for('singleBook', book_id = book_id))
     else:
         return render_template('edit_book.html', book = book, categories = categories)
@@ -195,11 +195,11 @@ def deleteBook(book_id):
     if request.method == 'POST':
         session.delete(book)
         session.commit()
+        flash("Book: {} deleted successfully!".format(book.title))
         return redirect(url_for('indexPage'))
     else:
         return render_template('delete_book.html',
             book = book, books = books, category_counts = category_counts)
-
 
 # Oauth stuff
 
