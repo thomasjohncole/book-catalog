@@ -30,10 +30,10 @@
         </div>
 
         <div class='col-md-6'>
-            <h2>Books <small>alpha by title</small></h2>
+            <h2>Books <small>alpha by title, author, or category</small></h2>
 
             <table class='table table-striped table-condensed'>
-            <th>Title</th><th>Author</th><th>Category</th>
+            <th><a href="{{ url_for('indexPage') }}">Title</a></th><th><a href="{{ url_for('indexAuthorSorted') }}">Author</a></th><th><a href="{{ url_for('indexCategorySorted') }}">Category</a></th>
             {% for book in books %}
 
                 <tr><td><a href="{{ url_for('singleBook', book_id = book.id) }}">{{ book.title }}</a></td><td>{{ book.author }}</td>

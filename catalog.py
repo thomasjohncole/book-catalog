@@ -19,10 +19,43 @@ session = DBSession()
 # create an instance of the DBSession  object - to make a changes
 # to the database, we can call a method within the session
 
+# index page views
+
 @app.route('/')
 def indexPage():
-    """ Shows a list of categories and a list of books """
+    """ Shows a list of categories and a list of books, sorted by title """
     books = session.query(Book).order_by(Book.title)
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
+    return render_template('index.html',books = books, category_counts = category_counts)
+
+@app.route('/author-sorted')
+def indexAuthorSorted():
+    """ Shows a list of categories and a list of books, sorted by author """
+    books = session.query(Book).order_by(Book.author)
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
+    return render_template('index.html',books = books, category_counts = category_counts)
+
+
+@app.route('/category-sorted')
+def indexCategorySorted():
+    """ Shows a list of categories and a list of books, sorted by category """
+    books = (
+        session.query(Book.title, Book.author, Book.id, Book.category_id,
+            Category.id, Category.name)
+        .join(Category, Book.category_id == Category.id)
+        .order_by(Category.name)
+        )
+
     category_counts = (
         session.query(Category.name, Category.id, func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
@@ -132,6 +165,8 @@ def singleBook(book_id):
 def createBook():
     """ Create a new book """
     categories = session.query(Category)
+    titles = session.query(Book.id).order_by(Book.title).all()
+    id_list = [x[0] for x in titles]
 
     if request.method == 'POST':
         new_book = Book(title = request.form['title'],
@@ -149,7 +184,7 @@ def createBook():
         session.add(new_book)
         session.commit()
         flash("Book: {} created successfully!".format(new_book.title))
-        return redirect(url_for('indexPage'))
+        return redirect(url_for('singleBook',book_id = new_book.id))
     else:
         return render_template('create_book.html', categories = categories)
 
