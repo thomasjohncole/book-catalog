@@ -115,6 +115,7 @@ def listBooks(category_id):
     books = session.query(Book).filter_by(category_id = category_id)
     return render_template('books_by_category.html', books = books, category = category)
 
+
 @app.route('/books/<int:book_id>')
 def singleBook(book_id):
     book = session.query(Book).filter_by(id = book_id).one()
@@ -148,6 +149,7 @@ def createBook():
 
         session.add(new_book)
         session.commit()
+        flash("Book: {} created successfully!".format(new_book.title))
         return redirect(url_for('indexPage'))
     else:
         return render_template('create_book.html', categories = categories)
