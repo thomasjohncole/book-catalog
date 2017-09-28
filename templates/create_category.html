@@ -8,14 +8,14 @@
     <h2>Create a New Category</h2>
 
     {% with messages = get_flashed_messages() %}
-            {% if messages %}
+        {% if messages %}
             <ul class="flashes list-unstyled">
-                {% for message in messages %}
+            {% for message in messages %}
                 <li><div class="alert alert-danger" role="alert">{{ message }}</div></li>
-                {% endfor %}
+            {% endfor %}
             </ul>
-            {% endif %}
-        {% endwith %}
+        {% endif %}
+    {% endwith %}
 
     <form class="form-horizontal" method="POST" action="{{ url_for('createCategory') }}">
 

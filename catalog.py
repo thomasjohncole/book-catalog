@@ -52,6 +52,7 @@ def createCategory():
 
         session.add(new_category)
         session.commit()
+        flash("Category: {} created successfully!".format(new_category.name))
         return redirect(url_for('indexPage'))
     else:
         return render_template('create_category.html', category_counts = category_counts)

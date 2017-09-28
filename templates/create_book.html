@@ -9,13 +9,13 @@
     <h2>Create a New Book <small>* denotes a required field</small></h2>
 
     {% with messages = get_flashed_messages() %}
-            {% if messages %}
+        {% if messages %}
             <ul class="flashes list-unstyled">
                 {% for message in messages %}
                 <li><div class="alert alert-danger" role="alert">{{ message }}</div></li>
                 {% endfor %}
             </ul>
-            {% endif %}
+        {% endif %}
     {% endwith %}
 
     <form class="form-horizontal" method="POST" action="{{ url_for('createBook') }}">
