@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
 from flask_bootstrap import Bootstrap
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -250,12 +250,23 @@ def gdisconnect():
 
 @app.route('/json')
 def indexPageJSON():
-    return "This is the JSON data for the index page!"
+    books = session.query(Book)
+    return jsonify(Books=[i.serialize for i in books])
 
-@app.route('/categories/books/JSON')
-def listBooksJSON():
-    return "This is the JSON data for the books list page for a particular category!"
 
+#@app.route('/menu/<int:restaurant_id>/JSON')
+#def restaurantMenuJSON(restaurant_id):
+#    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+#    items = session.query(MenuItem).filter_by(
+#        restaurant_id=restaurant_id).all()
+#    return jsonify(MenuItems=[i.serialize for i in items])
+
+
+@app.route('/categories/<int:category_id>/books-by-category/JSON')
+def listBooksByCategoryJSON(category_id):
+    category = session.query(Category).filter_by(id = category_id).one()
+    books = session.query(Book).filter_by(category_id = category_id)
+    return jsonify(Books=[i.serialize for i in books])
 
 if __name__ == '__main__':
     app.debug = True
