@@ -83,6 +83,12 @@ def createCategory():
             flash('You must fill out the form! Duh!')
             return redirect(url_for('createCategory'))
 
+        for category in category_counts:
+            if request.form['category_name'] == category.name:
+                flash("The category name: {} - is already in use. Duplicate names are not allowed."
+                    .format (category.name))
+                return redirect(url_for('createCategory'))
+
         session.add(new_category)
         session.commit()
         flash("Category: {} created successfully!".format(new_category.name))
@@ -102,10 +108,10 @@ def editCategory(category_id):
         .order_by(Category.name)
         )
 
-    if request.method == 'POST':
-        data = ({"name": request.form['category_name']})
+    if request.method == "POST":
+        data = ({"name": request.form["category_name"]})
 
-        if not request.form['category_name']:
+        if not request.form["category_name"]:
             flash('Form field cannot be blank!')
             return redirect(url_for('editCategory', category_id = category_id))
 
@@ -206,7 +212,7 @@ def editBook(book_id):
 
         if not request.form['title'] or not request.form['author']:
             flash('Please fill out required form fields!')
-            return redirect(url_for('createBook'))
+            return redirect(url_for('editBook', book_id = book_id))
 
         session.query(Book).filter_by(id = book_id).update(edit_book)
         session.commit()
@@ -254,6 +260,7 @@ def indexPageJSON():
     return jsonify(Books=[i.serialize for i in books])
 
 
+# THIS IS AN EXAMPLE FROM THE RESTAURANT MENU - REMOVE THIS BEFORE YOU SUBMIT!!
 #@app.route('/menu/<int:restaurant_id>/JSON')
 #def restaurantMenuJSON(restaurant_id):
 #    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
