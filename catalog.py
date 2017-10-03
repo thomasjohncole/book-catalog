@@ -170,7 +170,7 @@ def singleBook(book_id):
 @app.route('/books/create', methods=['GET', 'POST'])
 def createBook():
     """ Create a new book """
-    categories = session.query(Category)
+    categories = session.query(Category).order_by(Category.name)
     titles = session.query(Book.id).order_by(Book.title).all()
     id_list = [x[0] for x in titles]
 
@@ -199,7 +199,7 @@ def createBook():
 def editBook(book_id):
     """ Edit an existing book """
     book = session.query(Book).filter_by(id = book_id).one()
-    categories = session.query(Category)
+    categories = session.query(Category).order_by(Category.name)
 
     if request.method == 'POST':
         edit_book = ({'title': request.form['title'],
