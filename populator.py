@@ -19,10 +19,10 @@ session.add(category1)
 category2 = Category(name = "Technology")
 session.add(category2)
 
-category3 = Category(name = "Pychology/Self Help")
+category3 = Category(name = "Psych/Self Help")
 session.add(category3)
 
-category4 = Category(name = "General Non-Fiction")
+category4 = Category(name = "Non Fiction")
 session.add(category4)
 
 category5 = Category(name = "Fiction")
