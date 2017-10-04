@@ -85,6 +85,9 @@ def indexCategorySorted():
 @app.route('/categories/create', methods=['GET','POST'])
 def createCategory():
     """ Create a new category """
+    if 'username' not in login_session:
+      return redirect('/login')
+
     category_counts = (
         session.query(Category.name, Category.id, func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
@@ -116,6 +119,9 @@ def createCategory():
 @app.route('/categories/<int:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
     """ Edit the name of an existing category """
+    if 'username' not in login_session:
+      return redirect('/login')
+
     category = session.query(Category).filter_by(id = category_id).one()
     category_counts = (
         session.query(Category.name, Category.id, func.count(Book.title).label("count"))
@@ -143,6 +149,9 @@ def editCategory(category_id):
 @app.route('/categories/<int:category_id>/delete', methods=['GET', 'POST'])
 def deleteCategory(category_id):
     """ Delete an existing category """
+    if 'username' not in login_session:
+      return redirect('/login')
+
     category = session.query(Category).filter_by(id = category_id).one()
     category_counts = (
         session.query(Category.name, Category.id, func.count(Book.title).label("count"))
@@ -186,6 +195,9 @@ def singleBook(book_id):
 @app.route('/books/create', methods=['GET', 'POST'])
 def createBook():
     """ Create a new book """
+    if 'username' not in login_session:
+      return redirect('/login')
+
     categories = session.query(Category).order_by(Category.name)
     titles = session.query(Book.id).order_by(Book.title).all()
     id_list = [x[0] for x in titles]
@@ -214,6 +226,9 @@ def createBook():
 @app.route('/books/<int:book_id>/edit', methods=['GET', 'POST'])
 def editBook(book_id):
     """ Edit an existing book """
+    if 'username' not in login_session:
+      return redirect('/login')
+
     book = session.query(Book).filter_by(id = book_id).one()
     categories = session.query(Category).order_by(Category.name)
 
@@ -240,6 +255,9 @@ def editBook(book_id):
 @app.route('/books/<int:book_id>/delete', methods=['GET', 'POST'])
 def deleteBook(book_id):
     """ Delete a book and make it go bye bye """
+    if 'username' not in login_session:
+      return redirect('/login')
+
     book = session.query(Book).filter_by(id = book_id).one()
     books = session.query(Book).order_by(Book.title)
     category_counts = (
