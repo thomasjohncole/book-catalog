@@ -365,13 +365,13 @@ def gconnect():
 
     # see if local user exists, if it doesn't make a new one
 
-    #user_id = getUserID(login_session['email'])
-    #if not user_id:
-    #    user_id = createUser(login_session)
-    #login_session['user_id'] = user_id
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
 
-    #print "The user id is:"
-    #print user_id
+    print "The user id is:"
+    print user_id
 
 
     output = ''
@@ -436,6 +436,31 @@ def gdisconnect():
         return response
 
 # end of OAuth stuff
+
+# Local user helper functions
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email = email).one()
+        return user.id
+    except:
+        return None
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id = user_id).one()
+    return user
+
+
+def createUser(login_session):
+    newUser = User(name = login_session['username'],
+        email = login_session['email'],
+        picture = login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email = login_session['email']).one()
+    return user.id
+
 
 if __name__ == '__main__':
     app.debug = True
