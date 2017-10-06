@@ -1,13 +1,15 @@
-<html>
-<head>
+{% extends 'bootstrap/base.html' %}
+
+{% block navbar %}{% include 'header_nav_public.html' %}{% endblock %}
+
+{% block content %}
+<div class='container'>
     <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
     </script>
     <!--END PRE-REQUISITES FOR GOOGLE SIGN IN -->
 
-</head>
-<body>
     <!-- GOOGLE PLUS SIGN IN BUTTON-->
     <div id="signinButton">
         <span class="g-signin"
@@ -22,6 +24,7 @@
     </div>
     <div id="result"></div>
     <!-- END GOOGLE PLUS SIGN IN BUTTON-->
+    <p><strong>Please Sign-In Using Your Google Account</strong></p>
 
     <script>
     function signInCallback(authResult) {
@@ -60,6 +63,5 @@
         }
     }
     </script>
-
-</body>
-</html>
+</div>
+{% endblock %}
