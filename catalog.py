@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 
 from sqlalchemy import create_engine, func, update
 from sqlalchemy.orm import sessionmaker
-from db_setup import Base, Category, Book
+from db_setup import Base, Category, Book, User
 
 # new imports for Oauth section
 from flask import session as login_session
@@ -47,7 +47,10 @@ def indexPage():
         .group_by(Category.id)
         .order_by(Category.name)
         )
-    return render_template('index.html',books = books, category_counts = category_counts)
+    if 'username' not in login_session:
+      return render_template('index_public.html',books = books, category_counts = category_counts)
+    else:
+        return render_template('index.html',books = books, category_counts = category_counts)
 
 @app.route('/author-sorted')
 def indexAuthorSorted():
@@ -59,7 +62,10 @@ def indexAuthorSorted():
         .group_by(Category.id)
         .order_by(Category.name)
         )
-    return render_template('index.html',books = books, category_counts = category_counts)
+    if 'username' not in login_session:
+      return render_template('index_public.html',books = books, category_counts = category_counts)
+    else:
+        return render_template('index.html',books = books, category_counts = category_counts)
 
 
 @app.route('/category-sorted')
@@ -78,7 +84,10 @@ def indexCategorySorted():
         .group_by(Category.id)
         .order_by(Category.name)
         )
-    return render_template('index.html',books = books, category_counts = category_counts)
+    if 'username' not in login_session:
+      return render_template('index_public.html',books = books, category_counts = category_counts)
+    else:
+        return render_template('index.html',books = books, category_counts = category_counts)
 
 # category stuff
 
@@ -176,7 +185,10 @@ def listBooksByCategory(category_id):
     """ List books for a particular category """
     category = session.query(Category).filter_by(id = category_id).one()
     books = session.query(Book).filter_by(category_id = category_id)
-    return render_template('books_by_category.html', books = books, category = category)
+    if 'username' not in login_session:
+      return render_template('books_by_category_public.html',books = books, category = category)
+    else:
+        return render_template('books_by_category.html', books = books, category = category)
 
 
 @app.route('/books/<int:book_id>')
@@ -186,10 +198,12 @@ def singleBook(book_id):
     titles = session.query(Book.id).order_by(Book.title).all()
     id_list = [x[0] for x in titles]
 
-    return render_template('single_book.html',
-                            book = book,
-                            categories = categories,
-                            id_list = id_list)
+    if 'username' not in login_session:
+      return render_template('single_book_public.html', book = book,
+                             categories = categories, id_list = id_list)
+    else:
+        return render_template('single_book.html', book = book,
+                               categories = categories, id_list = id_list)
 
 
 @app.route('/books/create', methods=['GET', 'POST'])
