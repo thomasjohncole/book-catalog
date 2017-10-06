@@ -1,0 +1,20 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block navbar %}{% include 'header_nav_public.html' %}{% endblock %}
+
+{% block content %}
+<div class='container'>
+
+    <h2>{{ category.name }} Books</h2>
+
+            <table class='table table-striped table-condensed'>
+            <th>Title</th><th>Author</th><th>Category</th>
+            {% for book in books %}
+
+                <tr><td><a href="{{ url_for('singleBook', book_id = book.id) }}">{{ book.title }}</a></td><td>{{ book.author }}</td><td>{{ category.name }}</td><td>{{book.count}}</td></tr>
+
+            {% endfor %}
+            </table>
+
+</div>
+{% endblock %}
