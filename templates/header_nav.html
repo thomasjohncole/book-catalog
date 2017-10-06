@@ -9,13 +9,15 @@
 <nav class="navbar navbar-inverse bg-primary">
     <div class="container">
         <div class="row">
-            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <!-- logged in as login_session['email'] -->
+            </div>
             <div class="col-md-6 text-right">
                 <a class="btn btn-primary navbar-btn nounderline" href="{{ url_for('createCategory') }}">New Category</a>
 
                 <a class="btn btn-primary navbar-btn" href="{{ url_for('createBook') }}">New Book</a>
 
-                <a class="btn btn-primary navbar-btn" href="#">Log In</a>
+                <a class="btn btn-primary navbar-btn" href="#">Log Out</a>
             </div>
         </div>
     </div>
