@@ -8,7 +8,7 @@ from db_setup import Base, Category, Book, User
 # new imports for Oauth section
 from flask import session as login_session
 import random, string
-# from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -342,22 +342,50 @@ def gconnect():
     code = request.data
     try:
         # Upgrade the authorization code into a credentials object
-        # oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
-        # oauth_flow.client_id = CLIENT_ID
-        # oauth_flow.client_secret = gsecret_access_key
+        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
 
-        oauth_flow = OAuth2WebServerFlow(client_id='CLIENT_ID',
-                       client_secret='gclient_secret',
-                       scope='',
-                       redirect_uri='postmessage')
+        # I added these after I made environment varibles, didn't work
+        oauth_flow.client_id = CLIENT_ID
+        oauth_flow.client_secret = gclient_secret
 
-        # oauth_flow.redirect_uri = 'postmessage'
+        # this doesn't work either
+        #oauth_flow = OAuth2WebServerFlow(client_id='CLIENT_ID',
+        #               client_secret='gclient_secret',
+        #               scope='',
+        #               redirect_uri='postmessage')
+
+        print CLIENT_ID
+        print gclient_secret
+
+        oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
         print credentials.to_json()
     except FlowExchangeError:
         response = make_response(json.dumps('Failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
+
+# WORKING VERSION FROM OAUTH PROJECT
+#    def gconnect():
+#    if request.args.get('state') != login_session['state']:
+#       response = make_response(json.dumps('Invalid state parameter'), 401)
+#        response.headers['Content-Type'] = 'application/json'
+#        return response
+    # Obtain authorization data
+#    code = request.data
+#    try:
+        # Upgrade the authorization code into a credentials object
+#        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+#        oauth_flow.redirect_uri = 'postmessage'
+#        credentials = oauth_flow.step2_exchange(code)
+#        print credentials.to_json()
+#    except FlowExchangeError:
+#        response = make_response(json.dumps('Failed to upgrade the authorization code.'), 401)
+#        response.headers['Content-Type'] = 'application/json'
+#        return response
+
+
+
 
     # Check and see is access token is valid
     access_token = credentials.access_token
