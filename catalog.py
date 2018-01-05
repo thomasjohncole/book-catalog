@@ -437,31 +437,35 @@ def gdisconnect():
     access_token = login_session.get('access_token')
 
     if access_token is None:
-
         print 'Access Token is None'
-
         response = make_response(json.dumps('Current user not connected'), 401)
         response.headers['Content-type'] = 'application/json'
         return response
 
-    print 'In gdisconnect access token is:'
-    print access_token
-    print
-    print 'User name is: '
-    print login_session['username']
-    print
-    print 'full login_session info:'
-    print login_session
+    # print statements for debugging
+    #print 'In gdisconnect access token is:'
+    #print access_token
+    #print
+    #print 'User name is: '
+    #print login_session['username']
+    #print
+    #print 'full login_session info:'
+    #print login_session
+
     url = "https://accounts.google.com/o/oauth2/revoke?token=%s" % login_session['access_token']
-    print
-    print 'url is:'
-    print url
+
+    # print statements for debugging
+    #print
+    #print 'url is:'
+    #print url
+
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
-    print
-    print 'result of GET request to url is: '
-    print result
+    # Yet more debugging with print
+    #print
+    #print 'result of GET request to url is: '
+    #print result
 
     if result['status'] == '200':
         del login_session['access_token']
