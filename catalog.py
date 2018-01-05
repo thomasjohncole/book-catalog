@@ -23,11 +23,9 @@ Bootstrap(app)
 # you MUST REGISTER this app with Google before this will do anything!
 import os
 # get will return None if key doesn't exist
+# attn code reviewer, please create environment variables in your VM when testing
 CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 gclient_secret = os.environ.get('GOOGLE_CLIENT_SECRET')
-
-#CLIENT_ID = json.loads(
-#   open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "libro-catalog"
 
 engine = create_engine('sqlite:///books.db')
@@ -95,7 +93,7 @@ def indexCategorySorted():
     else:
         return render_template('index.html',books = books, category_counts = category_counts)
 
-# category stuff
+# category views
 
 @app.route('/categories/create', methods=['GET','POST'])
 def createCategory():
@@ -184,7 +182,7 @@ def deleteCategory(category_id):
         return render_template('delete_category.html',
             category = category, category_counts = category_counts)
 
-# book stuff
+# book views
 
 @app.route('/categories/<int:category_id>/books-by-category')
 def listBooksByCategory(category_id):
@@ -296,7 +294,7 @@ def deleteBook(book_id):
         return render_template('delete_book.html',
             book = book, books = books, category_counts = category_counts)
 
-# JSON stuff
+# JSON API routes
 
 @app.route('/json')
 def indexPageJSON():
@@ -319,8 +317,7 @@ def listBooksByCategoryJSON(category_id):
     books = session.query(Book).filter_by(category_id = category_id)
     return jsonify(Books=[i.serialize for i in books])
 
-# Oauth stuff
-
+# Oauth and login functions
 
 @app.route('/login')
 def showLogin():
@@ -344,18 +341,13 @@ def gconnect():
         # Upgrade the authorization code into a credentials object
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
 
-        # I added these after I made environment varibles, didn't work
+        # These values are pulled from environment variables, not client_secrets.json
         oauth_flow.client_id = CLIENT_ID
         oauth_flow.client_secret = gclient_secret
 
-        # this doesn't work either
-        #oauth_flow = OAuth2WebServerFlow(client_id='CLIENT_ID',
-        #               client_secret='gclient_secret',
-        #               scope='',
-        #               redirect_uri='postmessage')
-
-        print CLIENT_ID
-        print gclient_secret
+        # print statements for debugging - do we have the correct values?
+        #print CLIENT_ID
+        #print gclient_secret
 
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
@@ -364,28 +356,6 @@ def gconnect():
         response = make_response(json.dumps('Failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-
-# WORKING VERSION FROM OAUTH PROJECT
-#    def gconnect():
-#    if request.args.get('state') != login_session['state']:
-#       response = make_response(json.dumps('Invalid state parameter'), 401)
-#        response.headers['Content-Type'] = 'application/json'
-#        return response
-    # Obtain authorization data
-#    code = request.data
-#    try:
-        # Upgrade the authorization code into a credentials object
-#        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
-#        oauth_flow.redirect_uri = 'postmessage'
-#        credentials = oauth_flow.step2_exchange(code)
-#        print credentials.to_json()
-#    except FlowExchangeError:
-#        response = make_response(json.dumps('Failed to upgrade the authorization code.'), 401)
-#        response.headers['Content-Type'] = 'application/json'
-#        return response
-
-
-
 
     # Check and see is access token is valid
     access_token = credentials.access_token
@@ -447,7 +417,6 @@ def gconnect():
     print "The user id is:"
     print user_id
 
-
     output = ''
     output +='<h1>Welcome, '
     output += login_session['username']
@@ -483,7 +452,6 @@ def gdisconnect():
     print
     print 'full login_session info:'
     print login_session
-    # url = "https://accounts.google.com/o/oauth/revoke?token=%s" % login_session['access_token']
     url = "https://accounts.google.com/o/oauth2/revoke?token=%s" % login_session['access_token']
     print
     print 'url is:'
@@ -509,7 +477,7 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-# end of OAuth stuff
+# end of OAuth login functions
 
 # Local user helper functions
 
@@ -540,7 +508,3 @@ if __name__ == '__main__':
     app.debug = True
     app.secret_key = 'super_secret_key'
     app.run(host = '0.0.0.0', port = 5000)
-
-
-
-
