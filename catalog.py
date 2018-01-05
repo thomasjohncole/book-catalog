@@ -54,7 +54,9 @@ def indexPage():
     if 'username' not in login_session:
       return render_template('index_public.html',books = books, category_counts = category_counts)
     else:
-        return render_template('index.html',books = books, category_counts = category_counts)
+        user = login_session['email']
+        return render_template('index.html',books = books,
+                                category_counts = category_counts, user = user)
 
 @app.route('/author-sorted')
 def indexAuthorSorted():
@@ -69,7 +71,9 @@ def indexAuthorSorted():
     if 'username' not in login_session:
       return render_template('index_public.html',books = books, category_counts = category_counts)
     else:
-        return render_template('index.html',books = books, category_counts = category_counts)
+        user = login_session['email']
+        return render_template('index.html',books = books,
+                                category_counts = category_counts, user = user)
 
 
 @app.route('/category-sorted')
@@ -91,7 +95,9 @@ def indexCategorySorted():
     if 'username' not in login_session:
       return render_template('index_public.html',books = books, category_counts = category_counts)
     else:
-        return render_template('index.html',books = books, category_counts = category_counts)
+        user = login_session['email']
+        return render_template('index.html',books = books,
+                                category_counts = category_counts, user = user)
 
 # category views
 
@@ -126,7 +132,9 @@ def createCategory():
         flash("Category: {} created successfully!".format(new_category.name))
         return redirect(url_for('indexPage'))
     else:
-        return render_template('create_category.html', category_counts = category_counts)
+        user = login_session['email']
+        return render_template('create_category.html',
+                                category_counts = category_counts, user = user)
 
 
 @app.route('/categories/<int:category_id>/edit', methods=['GET', 'POST'])
@@ -155,8 +163,9 @@ def editCategory(category_id):
         flash("Category: {} edited successfully!".format(category.name))
         return redirect(url_for('indexPage'))
     else:
+        user = login_session['email']
         return render_template('edit_category.html',
-            category = category, category_counts = category_counts)
+            category = category, category_counts = category_counts, user = user)
 
 
 @app.route('/categories/<int:category_id>/delete', methods=['GET', 'POST'])
@@ -179,8 +188,9 @@ def deleteCategory(category_id):
         flash("Category: {} deleted successfully!".format(category.name))
         return redirect(url_for('indexPage'))
     else:
+        user = login_session['email']
         return render_template('delete_category.html',
-            category = category, category_counts = category_counts)
+            category = category, category_counts = category_counts, user = user)
 
 # book views
 
@@ -192,7 +202,9 @@ def listBooksByCategory(category_id):
     if 'username' not in login_session:
       return render_template('books_by_category_public.html',books = books, category = category)
     else:
-        return render_template('books_by_category.html', books = books, category = category)
+        user = login_session['email']
+        return render_template('books_by_category.html', books = books,
+                                category = category, user = user)
 
 
 @app.route('/books/<int:book_id>')
@@ -206,8 +218,9 @@ def singleBook(book_id):
       return render_template('single_book_public.html', book = book,
                              categories = categories, id_list = id_list)
     else:
+        user = login_session['email']
         return render_template('single_book.html', book = book,
-                               categories = categories, id_list = id_list)
+                               categories = categories, id_list = id_list, user = user)
 
 
 @app.route('/books/create', methods=['GET', 'POST'])
@@ -238,7 +251,8 @@ def createBook():
         flash("Book: {} created successfully!".format(new_book.title))
         return redirect(url_for('singleBook',book_id = new_book.id))
     else:
-        return render_template('create_book.html', categories = categories)
+        user = login_session['email']
+        return render_template('create_book.html', categories = categories, user = user)
 
 
 @app.route('/books/<int:book_id>/edit', methods=['GET', 'POST'])
@@ -268,7 +282,9 @@ def editBook(book_id):
         flash("Book: {} edited successfully!".format(book.title))
         return redirect(url_for('singleBook', book_id = book_id))
     else:
-        return render_template('edit_book.html', book = book, categories = categories)
+        user = login_session['email']
+        return render_template('edit_book.html', book = book,
+                                categories = categories, user = user)
 
 @app.route('/books/<int:book_id>/delete', methods=['GET', 'POST'])
 def deleteBook(book_id):
@@ -291,8 +307,9 @@ def deleteBook(book_id):
         flash("Book: {} deleted successfully!".format(book.title))
         return redirect(url_for('indexPage'))
     else:
+        user = login_session['email']
         return render_template('delete_book.html',
-            book = book, books = books, category_counts = category_counts)
+            book = book, books = books, category_counts = category_counts, user = user)
 
 # JSON API routes
 
