@@ -440,7 +440,9 @@ def gdisconnect():
         print 'Access Token is None'
         response = make_response(json.dumps('Current user not connected'), 401)
         response.headers['Content-type'] = 'application/json'
-        return response
+        #return response
+        flash("Current user is not logged in")
+        return redirect(url_for('indexPage'))
 
     # print statements for debugging
     #print 'In gdisconnect access token is:'
