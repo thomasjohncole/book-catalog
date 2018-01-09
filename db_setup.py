@@ -25,6 +25,23 @@ class Category(Base):
     user_id = Column(Integer,ForeignKey('user.id'))
     user = relationship(User)
 
+    @property
+    def serialize(self):
+        """ returns serialized object data """
+        return {
+            'name' : self.name,
+            'id' : self.id,
+            'many2many' : self.serialize_many2many,
+        }
+
+    @property
+    def serialize_many2many(self):
+       """
+       Return object's relations in easily serializeable format.
+       NB! Calls many2many's serialize property.
+       """
+       return [ item.serialize for item in self.many2many]
+
 class Book(Base):
     __tablename__ = 'book'
 
@@ -49,6 +66,7 @@ class Book(Base):
             'author' : self.author,
             'author2' : self.author2,
             'description' : self.description,
+            'category_id' : self.category_id,
         }
 
 

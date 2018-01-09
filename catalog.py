@@ -52,11 +52,48 @@ def indexPage():
         .order_by(Category.name)
         )
     if 'username' not in login_session:
-      return render_template('index_public.html',books = books, category_counts = category_counts)
+      return render_template('index_public.html', category_counts = category_counts, books = books)
     else:
         user = login_session['email']
         return render_template('index.html',books = books,
-                                category_counts = category_counts, user = user)
+                                category_counts = category_counts,  user = user)
+
+@app.route('/JSON')
+def indexPageJSON():
+    """ creates a JSON endpoint for the indexPage view function """
+    books = session.query(Book).order_by(Book.title)
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
+    # define empty list for the categories with title counts
+    cat_counts = []
+    # iterate through query results and create dictionary
+    for category in category_counts:
+        result = {
+            'Category Name' : category.name,
+            'Title Count' : category.count,
+        }
+        # append dictionary to list, creating a list of dictionaries
+        cat_counts.append(result)
+
+    # define empty list for books with category and author
+    book_list = []
+    # iterate through results and create dictionary
+    for book in books:
+        result = {
+            'Title' : book.title,
+            'Author' : book.author,
+            'Category' : category.name,
+        }
+        # append dictionary to list, creating a list of dictionaries
+        book_list.append(result)
+    # use jsonify to format the two lists for the JSON endpoint
+    return jsonify(Categories=cat_counts, Books=book_list)
+    # return jsonify(Books=book_list)
+
 
 @app.route('/author-sorted')
 def indexAuthorSorted():
@@ -74,6 +111,43 @@ def indexAuthorSorted():
         user = login_session['email']
         return render_template('index.html',books = books,
                                 category_counts = category_counts, user = user)
+
+
+@app.route('/author-sorted/JSON')
+def indexAuthorSortedJSON():
+    """ creates a JSON endpoint for the indexAuthorSorted view function """
+    books = session.query(Book).order_by(Book.author)
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
+    # define empty list for the categories with title counts
+    cat_counts = []
+    # iterate through query results and create dictionary
+    for category in category_counts:
+        result = {
+            'Category Name' : category.name,
+            'Title Count' : category.count,
+        }
+        # append dictionary to list, creating a list of dictionaries
+        cat_counts.append(result)
+
+    # define empty list for books with category and author
+    book_list = []
+    # iterate through results and create dictionary
+    for book in books:
+        result = {
+            'Title' : book.title,
+            'Author' : book.author,
+            'Category' : category.name,
+        }
+        # append dictionary to list, creating a list of dictionaries
+        book_list.append(result)
+    # use jsonify to format the two lists for the JSON endpoint
+    return jsonify(Categories=cat_counts, Books=book_list)
+    # return jsonify(Books=book_list)
 
 
 @app.route('/category-sorted')
@@ -98,6 +172,48 @@ def indexCategorySorted():
         user = login_session['email']
         return render_template('index.html',books = books,
                                 category_counts = category_counts, user = user)
+
+@app.route('/category-sorted/JSON')
+def indexCategorySortedJSON():
+    """ creates a JSON endpoint for the indexCategorySorted view function """
+    books = (
+        session.query(Book.title, Book.author, Book.id, Book.category_id,
+            Category.id, Category.name)
+        .join(Category, Book.category_id == Category.id)
+        .order_by(Category.name)
+        )
+
+    category_counts = (
+        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        .outerjoin(Book, Category.id == Book.category_id)
+        .group_by(Category.id)
+        .order_by(Category.name)
+        )
+    # define empty list for the categories with title counts
+    cat_counts = []
+    # iterate through query results and create dictionary
+    for category in category_counts:
+        result = {
+            'Category Name' : category.name,
+            'Title Count' : category.count,
+        }
+        # append dictionary to list, creating a list of dictionaries
+        cat_counts.append(result)
+    # define empty list for books with category and author
+    book_list = []
+    # iterate through results and create dictionary
+    for book in books:
+        result = {
+            'Title' : book.title,
+            'Author' : book.author,
+            'Category' : category.name,
+        }
+        print result
+        # append dictionary to list, creating a list of dictionaries
+        book_list.append(result)
+    # use jsonify to format the two lists for the JSON endpoint
+    return jsonify(Categories=cat_counts, Books=book_list)
+    # return jsonify(Books=book_list)
 
 # category views
 
@@ -313,10 +429,10 @@ def deleteBook(book_id):
 
 # JSON API routes
 
-@app.route('/json')
-def indexPageJSON():
-    books = session.query(Book)
-    return jsonify(Books=[i.serialize for i in books])
+#@app.route('/JSON')
+#def indexPageJSON():
+#    books = session.query(Book)
+#    return jsonify(Books=[i.serialize for i in books])
 
 
 # THIS IS AN EXAMPLE FROM THE RESTAURANT MENU - REMOVE THIS BEFORE YOU SUBMIT!!
