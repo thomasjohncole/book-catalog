@@ -39,8 +39,7 @@ session = DBSession()
 # create an instance of the DBSession  object - to make a changes
 # to the database, we can call a method within the session
 
-# index page views
-
+# index page views and corresponding JSON enpoint functions
 @app.route('/')
 def indexPage():
     """ Shows a list of categories and a list of books, sorted by title """
@@ -155,7 +154,6 @@ def indexAuthorSortedJSON():
     return jsonify(Categories=cat_counts, Books=book_list)
 
 
-
 @app.route('/category-sorted')
 def indexCategorySorted():
     """ Shows a list of categories and a list of books, sorted by category """
@@ -223,8 +221,7 @@ def indexCategorySortedJSON():
     return jsonify(Categories=cat_counts, Books=book_list)
 
 
-# category views
-
+# category create, update, and delete functions
 @app.route('/categories/create', methods=['GET','POST'])
 def createCategory():
     """ Create a new category """
@@ -316,11 +313,11 @@ def deleteCategory(category_id):
         return render_template('delete_category.html',
             category = category, category_counts = category_counts, user = user)
 
-# book views
 
+# book view functions and corresponding JSON endpoint functions
 @app.route('/categories/<int:category_id>/books-by-category')
 def listBooksByCategory(category_id):
-    """ List books for a particular category """
+    """ Display books for a particular category """
     category = session.query(Category).filter_by(id = category_id).one()
     books = session.query(Book).filter_by(category_id = category_id)
     if 'username' not in login_session:
@@ -331,8 +328,29 @@ def listBooksByCategory(category_id):
                                 category = category, user = user)
 
 
+@app.route('/categories/<int:category_id>/books-by-category/JSON')
+def listBooksByCategoryJSON(category_id):
+    """ Display books for a particular category """
+    category = session.query(Category).filter_by(id = category_id).one()
+    books = session.query(Book).filter_by(category_id = category_id)
+    # define empty list
+    book_list = []
+    for book in books:
+        if book.category.id == category.id:
+        # create a dictionary entry for each book that matches the category
+            result = {
+                    'Title' : book.title,
+                    'Author' : book.author,
+                    'Category' : category.name,
+                }
+        book_list.append(result)
+    # use jsonify the list and give it a key
+    return jsonify(Books_by_Category=book_list)
+
+
 @app.route('/books/<int:book_id>')
 def singleBook(book_id):
+    """ Display information about a particular book """
     book = session.query(Book).filter_by(id = book_id).one()
     categories = session.query(Category)
     titles = session.query(Book.id).order_by(Book.title).all()
@@ -347,6 +365,27 @@ def singleBook(book_id):
                                categories = categories, id_list = id_list, user = user)
 
 
+@app.route('/books/<int:book_id>/JSON')
+def singleBookJSON(book_id):
+    """ Display information about a particular book """
+    book = session.query(Book).filter_by(id = book_id).one()
+    categories = session.query(Category)
+    # loop through the categories until it matches the queried book
+    for category in categories:
+        if category.id == book.category_id:
+        # create a dictionary for the book info
+            result = {
+                            'Title' : book.title,
+                            'Author' : book.author,
+                            'Second Author' : book.author2,
+                            'Description' : book.description,
+                            'Category' : category.name,
+                        }
+    # jsonify the dictionary for the endpoint
+    return jsonify(result)
+
+
+#book create, update, delete functions
 @app.route('/books/create', methods=['GET', 'POST'])
 def createBook():
     """ Create a new book """
@@ -435,31 +474,8 @@ def deleteBook(book_id):
         return render_template('delete_book.html',
             book = book, books = books, category_counts = category_counts, user = user)
 
-# JSON API routes
-
-#@app.route('/JSON')
-#def indexPageJSON():
-#    books = session.query(Book)
-#    return jsonify(Books=[i.serialize for i in books])
-
-
-# THIS IS AN EXAMPLE FROM THE RESTAURANT MENU - REMOVE THIS BEFORE YOU SUBMIT!!
-#@app.route('/menu/<int:restaurant_id>/JSON')
-#def restaurantMenuJSON(restaurant_id):
-#    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
-#    items = session.query(MenuItem).filter_by(
-#        restaurant_id=restaurant_id).all()
-#    return jsonify(MenuItems=[i.serialize for i in items])
-
-
-@app.route('/categories/<int:category_id>/books-by-category/JSON')
-def listBooksByCategoryJSON(category_id):
-    category = session.query(Category).filter_by(id = category_id).one()
-    books = session.query(Book).filter_by(category_id = category_id)
-    return jsonify(Books=[i.serialize for i in books])
 
 # Oauth and login functions
-
 @app.route('/login')
 def showLogin():
     # create anti-forgery state token
@@ -626,8 +642,6 @@ def gdisconnect():
         response = make_response(json.dumps('Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
         return response
-
-# end of OAuth login functions
 
 # Local user helper functions
 
