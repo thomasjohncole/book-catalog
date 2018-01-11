@@ -36,7 +36,7 @@
             <!--- hackey way to get a prev and next button to paginate alphabetically by title...
 
             Jinja's variable scope doesn't extend outside the for loop, but you can use an array
-            and append it. The new_book_id is set to an empty array first, and then we iterate through the sorted list of book.id values until we find the current book id. The loop.index keeps
+            and append it. The new_book_id is set to an empty list first, and then we iterate through the sorted list of book.id values until we find the current book id. The loop.index keeps
             track of the iterations of the for loop, so we can use loop.index to keep track of the
             list position. If we're at the end of the list we just assign new_book_id the value of
             the first list position, id_list[0]. If we're not at the end of the list, we can use
@@ -57,7 +57,7 @@
             {% set new_book_id = new_book_id[0] %}
 
             <!--- Similar logic applies below, we're just going in the opposite direction to derive
-            the prev_book_id value. Start with the empty array again, and then find the current book
+            the prev_book_id value. Start with the empty list again, and then find the current book
             id.This time we check and see if we're at the first value of the list, in which case we go
             to the end, if not we just decrement the list position. We use -2 to decrement, because
             loop.index starts with 1, whereas the list position starts with 0.   -->
