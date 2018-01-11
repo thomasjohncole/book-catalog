@@ -72,27 +72,30 @@ def indexPageJSON():
     cat_counts = []
     # iterate through query results and create dictionary
     for category in category_counts:
-        result = {
-            'Category Name' : category.name,
-            'Title Count' : category.count,
-        }
+        for book in books:
+            result = {
+                'Category Name' : category.name,
+                'Title Count' : category.count,
+            }
         # append dictionary to list, creating a list of dictionaries
         cat_counts.append(result)
 
-    # define empty list for books with category and author
+    # define empty list for book  titles with category name and author
     book_list = []
     # iterate through results and create dictionary
     for book in books:
-        result = {
-            'Title' : book.title,
-            'Author' : book.author,
-            'Category' : category.name,
-        }
+        for category in category_counts:
+            if category.id == book.category_id:
+            # this will assign the proper category name to the book
+                result = {
+                    'Title' : book.title,
+                    'Author' : book.author,
+                    'Category' : category.name,
+                }
         # append dictionary to list, creating a list of dictionaries
         book_list.append(result)
     # use jsonify to format the two lists for the JSON endpoint
     return jsonify(Categories=cat_counts, Books=book_list)
-    # return jsonify(Books=book_list)
 
 
 @app.route('/author-sorted')
@@ -138,16 +141,19 @@ def indexAuthorSortedJSON():
     book_list = []
     # iterate through results and create dictionary
     for book in books:
-        result = {
-            'Title' : book.title,
-            'Author' : book.author,
-            'Category' : category.name,
-        }
+        for category in category_counts:
+            if category.id == book.category_id:
+            # this will assign the proper category name to the book
+                result = {
+                    'Title' : book.title,
+                    'Author' : book.author,
+                    'Category' : category.name,
+                }
         # append dictionary to list, creating a list of dictionaries
         book_list.append(result)
     # use jsonify to format the two lists for the JSON endpoint
     return jsonify(Categories=cat_counts, Books=book_list)
-    # return jsonify(Books=book_list)
+
 
 
 @app.route('/category-sorted')
@@ -203,17 +209,19 @@ def indexCategorySortedJSON():
     book_list = []
     # iterate through results and create dictionary
     for book in books:
-        result = {
-            'Title' : book.title,
-            'Author' : book.author,
-            'Category' : category.name,
-        }
-        print result
+        for category in category_counts:
+            if category.id == book.category_id:
+            # this will assign the proper category name to the book
+                result = {
+                    'Title' : book.title,
+                    'Author' : book.author,
+                    'Category' : category.name,
+                }
         # append dictionary to list, creating a list of dictionaries
         book_list.append(result)
     # use jsonify to format the two lists for the JSON endpoint
     return jsonify(Categories=cat_counts, Books=book_list)
-    # return jsonify(Books=book_list)
+
 
 # category views
 
