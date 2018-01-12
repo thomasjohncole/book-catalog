@@ -381,7 +381,7 @@ def singleBookJSON(book_id):
                             'Description' : book.description,
                             'Category' : category.name,
                         }
-    # jsonify the dictionary for the endpoint
+    # jsonify the dictionary for the endpoint display
     return jsonify(result)
 
 
@@ -644,7 +644,6 @@ def gdisconnect():
         return response
 
 # Local user helper functions
-
 def getUserID(email):
     try:
         user = session.query(User).filter_by(email = email).one()
