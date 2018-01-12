@@ -1,43 +1,47 @@
-from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
+import httplib2
+import json
+import os
+import random
+import requests
+import string
+
+from db_setup import Base, Category, Book, User
+
+from flask import (
+    Flask, request, render_template, redirect,
+    url_for, flash, jsonify, make_response
+    )
+from flask import session as login_session
 from flask_bootstrap import Bootstrap
+
+from oauth2client.client import (
+    flow_from_clientsecrets, OAuth2WebServerFlow, FlowExchangeError
+    )
 
 from sqlalchemy import create_engine, func, update
 from sqlalchemy.orm import sessionmaker
-from db_setup import Base, Category, Book, User
-
-# new imports for Oauth section
-from flask import session as login_session
-import random, string
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import OAuth2WebServerFlow
-from oauth2client.client import FlowExchangeError
-import httplib2
-import json
-from flask import make_response
-import requests
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 Bootstrap(app)
 
 # you MUST REGISTER this app with Google before this will do anything!
-import os
 # get will return None if key doesn't exist
-# attn code reviewer, please create environment variables in your VM when testing
 CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 gclient_secret = os.environ.get('GOOGLE_CLIENT_SECRET')
 APPLICATION_NAME = "libro-catalog"
 
 engine = create_engine('sqlite:///books.db')
-Base.metadata.bind = engine
 # binds the engine to the Base class
+Base.metadata.bind = engine
 # makes the connections between class definitions & corresponding tables in db
-DBSession = sessionmaker(bind = engine)
+DBSession = sessionmaker(bind=engine)
 # creates sessionmaker object, which establishes link of
 # communication between our code executions and the engine we created
 session = DBSession()
-# create an instance of the DBSession  object - to make a changes
+# creates an instance of the DBSession  object - to make a changes
 # to the database, we can call a method within the session
+
 
 # index page views and corresponding JSON enpoint functions
 @app.route('/')
@@ -45,17 +49,21 @@ def indexPage():
     """ Shows a list of categories and a list of books, sorted by title """
     books = session.query(Book).order_by(Book.title)
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count")
+                      )
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
         )
     if 'username' not in login_session:
-      return render_template('index_public.html', category_counts = category_counts, books = books)
+        return render_template('index_public.html',
+                               category_counts=category_counts, books=books)
     else:
         user = login_session['email']
-        return render_template('index.html',books = books,
-                                category_counts = category_counts,  user = user)
+        return render_template('index.html', books=books,
+                               category_counts=category_counts, user=user)
+
 
 @app.route('/JSON')
 def indexPageJSON():
@@ -108,11 +116,11 @@ def indexAuthorSorted():
         .order_by(Category.name)
         )
     if 'username' not in login_session:
-      return render_template('index_public.html',books = books, category_counts = category_counts)
+      return render_template('index_public.html',books=books, category_counts=category_counts)
     else:
         user = login_session['email']
-        return render_template('index.html',books = books,
-                                category_counts = category_counts, user = user)
+        return render_template('index.html',books=books,
+                                category_counts=category_counts, user=user)
 
 
 @app.route('/author-sorted/JSON')
@@ -171,11 +179,12 @@ def indexCategorySorted():
         .order_by(Category.name)
         )
     if 'username' not in login_session:
-      return render_template('index_public.html',books = books, category_counts = category_counts)
+      return render_template('index_public.html',books=books,
+                              category_counts=category_counts)
     else:
         user = login_session['email']
         return render_template('index.html',books = books,
-                                category_counts = category_counts, user = user)
+                                category_counts=category_counts, user=user)
 
 @app.route('/category-sorted/JSON')
 def indexCategorySortedJSON():
@@ -321,7 +330,7 @@ def listBooksByCategory(category_id):
     category = session.query(Category).filter_by(id = category_id).one()
     books = session.query(Book).filter_by(category_id = category_id)
     if 'username' not in login_session:
-      return render_template('books_by_category_public.html',books = books, category = category)
+      return render_template('books_by_category_public.html',books=books, category=category)
     else:
         user = login_session['email']
         return render_template('books_by_category.html', books = books,
