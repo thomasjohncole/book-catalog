@@ -1,5 +1,5 @@
-# Book Catalog 2018
-## Project 4 in the Full Stack Web Developer Nanodegree
+# Book Catalog 2018 #
+## Project 4 in the Full Stack Web Developer Nanodegree ##
 
 The Book Catalog 2018 is a web application which displays information about various books by performing various SQL queries and displaying the results in a user-friendly format. Information such as author, title, category, and a breif description are displayed in the browser.
 
@@ -13,17 +13,17 @@ In addition to the applications and extensions included in the Vagrantfile, flas
 
 The application allows for user login using the Google OAuth method. Once logged in , users can add their own books and categories to the database, which will be displayed by the application.
 
-## Files included
+## Files included ##
 
-catalog.py - the main Flask application file
-dbsetup.py - this file creates the database schema using SQLAlchemy
-populator.py - this file will add initial information to the database tables
-books.db - the actual SQLite database
-client_secrets.json - this file contains information used by Google OAuth
-book-catalog.sublime-workspace - this is a file used by the Sublime text editor
-various templates - these are the Jinja templates which are used for the HTML views seen by the user, found in the templates directory
+*catalog.py - the main Flask application file
+*dbsetup.py - this file creates the database schema using SQLAlchemy
+*populator.py - this file will add initial information to the database tables
+*books.db - the actual SQLite database
+*client_secrets.json - this file contains information used by Google OAuth
+*book-catalog.sublime-workspace - this is a file used by the Sublime text editor
+*various templates - these are the Jinja templates which are used for the HTML views seen by the user, found in the templates directory
 
-## How to Make It Work
+## How to Make It Work ##
 
 Install the virtual machine using Vagrant using the instructions found here:
 
