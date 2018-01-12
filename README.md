@@ -15,13 +15,13 @@ The application allows for user login using the Google OAuth method. Once logged
 
 ## Files included ##
 
-*catalog.py - the main Flask application file
-*dbsetup.py - this file creates the database schema using SQLAlchemy
-*populator.py - this file will add initial information to the database tables
-*books.db - the actual SQLite database
-*client_secrets.json - this file contains information used by Google OAuth
-*book-catalog.sublime-workspace - this is a file used by the Sublime text editor
-*various templates - these are the Jinja templates which are used for the HTML views seen by the user, found in the templates directory
+* catalog.py - the main Flask application file
+* dbsetup.py - this file creates the database schema using SQLAlchemy
+* populator.py - this file will add initial information to the database tables
+* books.db - the actual SQLite database
+* client_secrets.json - this file contains information used by Google OAuth
+* book-catalog.sublime-workspace - this is a file used by the Sublime text editor
+* various templates - these are the Jinja templates which are used for the HTML views seen by the user, found in the templates directory
 
 ## How to Make It Work ##
 
