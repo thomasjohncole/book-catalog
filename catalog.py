@@ -70,7 +70,8 @@ def indexPageJSON():
     """ creates a JSON endpoint for the indexPage view function """
     books = session.query(Book).order_by(Book.title)
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
@@ -81,8 +82,8 @@ def indexPageJSON():
     for category in category_counts:
         for book in books:
             result = {
-                'Category Name' : category.name,
-                'Title Count' : category.count,
+                'Category Name': category.name,
+                'Title Count': category.count,
             }
         # append dictionary to list, creating a list of dictionaries
         cat_counts.append(result)
@@ -93,11 +94,11 @@ def indexPageJSON():
     for book in books:
         for category in category_counts:
             if category.id == book.category_id:
-            # this will assign the proper category name to the book
+                # this will assign the proper category name to the book
                 result = {
-                    'Title' : book.title,
-                    'Author' : book.author,
-                    'Category' : category.name,
+                    'Title': book.title,
+                    'Author': book.author,
+                    'Category': category.name,
                 }
         # append dictionary to list, creating a list of dictionaries
         book_list.append(result)
@@ -110,17 +111,19 @@ def indexAuthorSorted():
     """ Shows a list of categories and a list of books, sorted by author """
     books = session.query(Book).order_by(Book.author)
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
         )
     if 'username' not in login_session:
-      return render_template('index_public.html',books=books, category_counts=category_counts)
+        return render_template('index_public.html', books=books,
+                               category_counts=category_counts)
     else:
         user = login_session['email']
-        return render_template('index.html',books=books,
-                                category_counts=category_counts, user=user)
+        return render_template('index.html', books=books,
+                               category_counts=category_counts, user=user)
 
 
 @app.route('/author-sorted/JSON')
@@ -128,7 +131,8 @@ def indexAuthorSortedJSON():
     """ creates a JSON endpoint for the indexAuthorSorted view function """
     books = session.query(Book).order_by(Book.author)
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
@@ -138,8 +142,8 @@ def indexAuthorSortedJSON():
     # iterate through query results and create dictionary
     for category in category_counts:
         result = {
-            'Category Name' : category.name,
-            'Title Count' : category.count,
+            'Category Name': category.name,
+            'Title Count': category.count,
         }
         # append dictionary to list, creating a list of dictionaries
         cat_counts.append(result)
@@ -150,11 +154,11 @@ def indexAuthorSortedJSON():
     for book in books:
         for category in category_counts:
             if category.id == book.category_id:
-            # this will assign the proper category name to the book
+                # this will assign the proper category name to the book
                 result = {
-                    'Title' : book.title,
-                    'Author' : book.author,
-                    'Category' : category.name,
+                    'Title': book.title,
+                    'Author': book.author,
+                    'Category': category.name,
                 }
         # append dictionary to list, creating a list of dictionaries
         book_list.append(result)
@@ -167,37 +171,40 @@ def indexCategorySorted():
     """ Shows a list of categories and a list of books, sorted by category """
     books = (
         session.query(Book.title, Book.author, Book.id, Book.category_id,
-            Category.id, Category.name)
+                      Category.id, Category.name)
         .join(Category, Book.category_id == Category.id)
         .order_by(Category.name)
         )
 
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
         )
     if 'username' not in login_session:
-      return render_template('index_public.html',books=books,
-                              category_counts=category_counts)
+        return render_template('index_public.html', books=books,
+                               category_counts=category_counts)
     else:
         user = login_session['email']
-        return render_template('index.html',books = books,
-                                category_counts=category_counts, user=user)
+        return render_template('index.html', books=books,
+                               category_counts=category_counts, user=user)
+
 
 @app.route('/category-sorted/JSON')
 def indexCategorySortedJSON():
     """ creates a JSON endpoint for the indexCategorySorted view function """
     books = (
         session.query(Book.title, Book.author, Book.id, Book.category_id,
-            Category.id, Category.name)
+                      Category.id, Category.name)
         .join(Category, Book.category_id == Category.id)
         .order_by(Category.name)
         )
 
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
@@ -207,8 +214,8 @@ def indexCategorySortedJSON():
     # iterate through query results and create dictionary
     for category in category_counts:
         result = {
-            'Category Name' : category.name,
-            'Title Count' : category.count,
+            'Category Name': category.name,
+            'Title Count': category.count,
         }
         # append dictionary to list, creating a list of dictionaries
         cat_counts.append(result)
@@ -218,11 +225,11 @@ def indexCategorySortedJSON():
     for book in books:
         for category in category_counts:
             if category.id == book.category_id:
-            # this will assign the proper category name to the book
+                # this will assign the proper category name to the book
                 result = {
-                    'Title' : book.title,
-                    'Author' : book.author,
-                    'Category' : category.name,
+                    'Title': book.title,
+                    'Author': book.author,
+                    'Category': category.name,
                 }
         # append dictionary to list, creating a list of dictionaries
         book_list.append(result)
@@ -231,21 +238,22 @@ def indexCategorySortedJSON():
 
 
 # category create, update, and delete functions
-@app.route('/categories/create', methods=['GET','POST'])
+@app.route('/categories/create', methods=['GET', 'POST'])
 def createCategory():
     """ Create a new category """
     if 'username' not in login_session:
-      return redirect('/login')
+        return redirect('/login')
 
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
         )
 
     if request.method == 'POST':
-        new_category = Category(name = request.form['category_name'])
+        new_category = Category(name=request.form['category_name'])
 
         if not request.form['category_name']:
             flash('You must fill out the form! Duh!')
@@ -253,8 +261,9 @@ def createCategory():
 
         for category in category_counts:
             if request.form['category_name'] == category.name:
-                flash("The category name: {} - is already in use. Duplicate names are not allowed."
-                    .format (category.name))
+                flash('''The category name: {} - is already in use.
+                      Duplicate names are not allowed.'''
+                      .format(category.name))
                 return redirect(url_for('createCategory'))
 
         session.add(new_category)
@@ -264,18 +273,19 @@ def createCategory():
     else:
         user = login_session['email']
         return render_template('create_category.html',
-                                category_counts = category_counts, user = user)
+                               category_counts=category_counts, user=user)
 
 
 @app.route('/categories/<int:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
     """ Edit the name of an existing category """
     if 'username' not in login_session:
-      return redirect('/login')
+        return redirect('/login')
 
-    category = session.query(Category).filter_by(id = category_id).one()
+    category = session.query(Category).filter_by(id=category_id).one()
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
@@ -286,27 +296,29 @@ def editCategory(category_id):
 
         if not request.form["category_name"]:
             flash('Form field cannot be blank!')
-            return redirect(url_for('editCategory', category_id = category_id))
+            return redirect(url_for('editCategory', category_id=category_id))
 
-        session.query(Category).filter_by(id = category_id).update(data)
+        session.query(Category).filter_by(id=category_id).update(data)
         session.commit()
         flash("Category: {} edited successfully!".format(category.name))
         return redirect(url_for('indexPage'))
     else:
         user = login_session['email']
         return render_template('edit_category.html',
-            category = category, category_counts = category_counts, user = user)
+                               category=category,
+                               category_counts=category_counts, user=user)
 
 
 @app.route('/categories/<int:category_id>/delete', methods=['GET', 'POST'])
 def deleteCategory(category_id):
     """ Delete an existing category """
     if 'username' not in login_session:
-      return redirect('/login')
+        return redirect('/login')
 
-    category = session.query(Category).filter_by(id = category_id).one()
+    category = session.query(Category).filter_by(id=category_id).one()
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
@@ -320,37 +332,39 @@ def deleteCategory(category_id):
     else:
         user = login_session['email']
         return render_template('delete_category.html',
-            category = category, category_counts = category_counts, user = user)
+                               category=category,
+                               category_counts=category_counts, user=user)
 
 
 # book view functions and corresponding JSON endpoint functions
 @app.route('/categories/<int:category_id>/books-by-category')
 def listBooksByCategory(category_id):
     """ Display books for a particular category """
-    category = session.query(Category).filter_by(id = category_id).one()
-    books = session.query(Book).filter_by(category_id = category_id)
+    category = session.query(Category).filter_by(id=category_id).one()
+    books = session.query(Book).filter_by(category_id=category_id)
     if 'username' not in login_session:
-      return render_template('books_by_category_public.html',books=books, category=category)
+        return render_template('books_by_category_public.html',
+                               books=books, category=category)
     else:
         user = login_session['email']
-        return render_template('books_by_category.html', books = books,
-                                category = category, user = user)
+        return render_template('books_by_category.html', books=books,
+                               category=category, user=user)
 
 
 @app.route('/categories/<int:category_id>/books-by-category/JSON')
 def listBooksByCategoryJSON(category_id):
     """ Display books for a particular category """
-    category = session.query(Category).filter_by(id = category_id).one()
-    books = session.query(Book).filter_by(category_id = category_id)
+    category = session.query(Category).filter_by(id=category_id).one()
+    books = session.query(Book).filter_by(category_id=category_id)
     # define empty list
     book_list = []
     for book in books:
         if book.category.id == category.id:
-        # create a dictionary entry for each book that matches the category
+            # create a dictionary entry for each book that matches the category
             result = {
-                    'Title' : book.title,
-                    'Author' : book.author,
-                    'Category' : category.name,
+                    'Title': book.title,
+                    'Author': book.author,
+                    'Category': category.name,
                 }
         book_list.append(result)
     # use jsonify the list and give it a key
@@ -360,59 +374,60 @@ def listBooksByCategoryJSON(category_id):
 @app.route('/books/<int:book_id>')
 def singleBook(book_id):
     """ Display information about a particular book """
-    book = session.query(Book).filter_by(id = book_id).one()
+    book = session.query(Book).filter_by(id=book_id).one()
     categories = session.query(Category)
     titles = session.query(Book.id).order_by(Book.title).all()
     id_list = [x[0] for x in titles]
 
     if 'username' not in login_session:
-      return render_template('single_book_public.html', book = book,
-                             categories = categories, id_list = id_list)
+        return render_template('single_book_public.html', book=book,
+                               categories=categories, id_list=id_list)
     else:
         user = login_session['email']
-        return render_template('single_book.html', book = book,
-                               categories = categories, id_list = id_list, user = user)
+        return render_template('single_book.html', book=book,
+                               categories=categories,
+                               id_list=id_list, user=user)
 
 
 @app.route('/books/<int:book_id>/JSON')
 def singleBookJSON(book_id):
     """ Display information about a particular book """
-    book = session.query(Book).filter_by(id = book_id).one()
+    book = session.query(Book).filter_by(id=book_id).one()
     categories = session.query(Category)
     # loop through the categories until it matches the queried book
     for category in categories:
         if category.id == book.category_id:
-        # create a dictionary for the book info
+            # create a dictionary for the book info
             result = {
-                            'Title' : book.title,
-                            'Author' : book.author,
-                            'Second Author' : book.author2,
-                            'Description' : book.description,
-                            'Category' : category.name,
+                            'Title': book.title,
+                            'Author': book.author,
+                            'Second Author': book.author2,
+                            'Description': book.description,
+                            'Category': category.name,
                         }
     # jsonify the dictionary for the endpoint display
     return jsonify(result)
 
 
-#book create, update, delete functions
+# book create, update, delete functions
 @app.route('/books/create', methods=['GET', 'POST'])
 def createBook():
     """ Create a new book """
     if 'username' not in login_session:
-      return redirect('/login')
+        return redirect('/login')
 
     categories = session.query(Category).order_by(Category.name)
     titles = session.query(Book.id).order_by(Book.title).all()
     id_list = [x[0] for x in titles]
 
     if request.method == 'POST':
-        new_book = Book(title = request.form['title'],
-                        subtitle = request.form['subtitle'],
-                        author = request.form['author'],
-                        author2 = request.form['author2'],
-                        description = request.form['description'],
-                        category_id = request.form['category_id']
-                           )
+        new_book = Book(title=request.form['title'],
+                        subtitle=request.form['subtitle'],
+                        author=request.form['author'],
+                        author2=request.form['author2'],
+                        description=request.form['description'],
+                        category_id=request.form['category_id']
+                        )
 
         if not request.form['title'] or not request.form['author']:
             flash('Please fill out required form fields!')
@@ -421,53 +436,56 @@ def createBook():
         session.add(new_book)
         session.commit()
         flash("Book: {} created successfully!".format(new_book.title))
-        return redirect(url_for('singleBook',book_id = new_book.id))
+        return redirect(url_for('singleBook', book_id=new_book.id))
     else:
         user = login_session['email']
-        return render_template('create_book.html', categories = categories, user = user)
+        return render_template('create_book.html',
+                               categories=categories, user=user)
 
 
 @app.route('/books/<int:book_id>/edit', methods=['GET', 'POST'])
 def editBook(book_id):
     """ Edit an existing book """
     if 'username' not in login_session:
-      return redirect('/login')
+        return redirect('/login')
 
-    book = session.query(Book).filter_by(id = book_id).one()
+    book = session.query(Book).filter_by(id=book_id).one()
     categories = session.query(Category).order_by(Category.name)
 
     if request.method == 'POST':
         edit_book = ({'title': request.form['title'],
                       'subtitle': request.form['subtitle'],
-                      'author':request.form['author'],
+                      'author': request.form['author'],
                       'author2': request.form['author2'],
                       'description': request.form['description'],
-                      'category_id': request.form['category_id']}
-                           )
+                      'category_id': request.form['category_id'],
+                      })
 
         if not request.form['title'] or not request.form['author']:
             flash('Please fill out required form fields!')
-            return redirect(url_for('editBook', book_id = book_id))
+            return redirect(url_for('editBook', book_id=book_id))
 
-        session.query(Book).filter_by(id = book_id).update(edit_book)
+        session.query(Book).filter_by(id=book_id).update(edit_book)
         session.commit()
         flash("Book: {} edited successfully!".format(book.title))
-        return redirect(url_for('singleBook', book_id = book_id))
+        return redirect(url_for('singleBook', book_id=book_id))
     else:
         user = login_session['email']
-        return render_template('edit_book.html', book = book,
-                                categories = categories, user = user)
+        return render_template('edit_book.html', book=book,
+                               categories=categories, user=user)
+
 
 @app.route('/books/<int:book_id>/delete', methods=['GET', 'POST'])
 def deleteBook(book_id):
     """ Delete a book and make it go bye bye """
     if 'username' not in login_session:
-      return redirect('/login')
+        return redirect('/login')
 
-    book = session.query(Book).filter_by(id = book_id).one()
+    book = session.query(Book).filter_by(id=book_id).one()
     books = session.query(Book).order_by(Book.title)
     category_counts = (
-        session.query(Category.name, Category.id, func.count(Book.title).label("count"))
+        session.query(Category.name, Category.id,
+                      func.count(Book.title).label("count"))
         .outerjoin(Book, Category.id == Book.category_id)
         .group_by(Category.id)
         .order_by(Category.name)
@@ -481,7 +499,8 @@ def deleteBook(book_id):
     else:
         user = login_session['email']
         return render_template('delete_book.html',
-            book = book, books = books, category_counts = category_counts, user = user)
+                               book=book, books=books,
+                               category_counts=category_counts, user=user)
 
 
 # Oauth and login functions
@@ -489,10 +508,10 @@ def deleteBook(book_id):
 def showLogin():
     # create anti-forgery state token
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-        for x in xrange(32))
+                    for x in xrange(32))
     login_session['state'] = state
     # return "The current state is %s" % login_session['state']
-    return render_template('login.html', STATE=state, CLIENT_ID = CLIENT_ID)
+    return render_template('login.html', STATE=state, CLIENT_ID=CLIENT_ID)
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -507,25 +526,28 @@ def gconnect():
         # Upgrade the authorization code into a credentials object
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
 
-        # These values are pulled from environment variables, not client_secrets.json
+        # These values are pulled from environment variables
         oauth_flow.client_id = CLIENT_ID
         oauth_flow.client_secret = gclient_secret
 
-        # print statements for debugging - do we have the correct values?
-        #print CLIENT_ID
-        #print gclient_secret
+        # statements for debugging - do we have the correct values?
+        # print CLIENT_ID
+        # print gclient_secret
 
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
         print credentials.to_json()
     except FlowExchangeError:
-        response = make_response(json.dumps('Failed to upgrade the authorization code.'), 401)
+        response = make_response(
+            json.dumps('Failed to upgrade the authorization code.'), 401
+            )
         response.headers['Content-Type'] = 'application/json'
         return response
 
     # Check and see is access token is valid
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
+           % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort
@@ -537,7 +559,8 @@ def gconnect():
     # Verify the access token is for the intended user
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
-        response = make_response(json.dumps("Token doesn't match given user ID."), 401)
+        response = make_response(json.dumps
+                                 ("Token doesn't match given user ID."), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -584,7 +607,7 @@ def gconnect():
     print user_id
 
     output = ''
-    output +='<h1>Welcome, '
+    output += '<h1>Welcome, '
     output += login_session['username']
     output += '!</h1>'
     output += '<img src="'
@@ -592,7 +615,7 @@ def gconnect():
     output += (''' " style = "width: 300px; height: 300px;
                border-radius: 150px; -webkit-border-radius:
                150px;-moz-border-radius: 150px;"> '''
-            )
+               )
     flash("you are now logged in as %s" % login_session['email'])
     print "done!"
     return output
@@ -606,34 +629,35 @@ def gdisconnect():
         print 'Access Token is None'
         response = make_response(json.dumps('Current user not connected'), 401)
         response.headers['Content-type'] = 'application/json'
-        #return response
+        # return response
         flash("Current user is not logged in")
         return redirect(url_for('indexPage'))
 
-    # print statements for debugging
-    #print 'In gdisconnect access token is:'
-    #print access_token
-    #print
-    #print 'User name is: '
-    #print login_session['username']
-    #print
-    #print 'full login_session info:'
-    #print login_session
+    # statements for debugging
+    # print 'In gdisconnect access token is:'
+    # print access_token
+    # print
+    # print 'User name is: '
+    # print login_session['username']
+    # print
+    # print 'full login_session info:'
+    # print login_session
 
-    url = "https://accounts.google.com/o/oauth2/revoke?token=%s" % login_session['access_token']
+    url = ("https://accounts.google.com/o/oauth2/revoke?token=%s"
+           % login_session['access_token'])
 
-    # print statements for debugging
-    #print
-    #print 'url is:'
-    #print url
+    # statements for debugging
+    # print
+    # print 'url is:'
+    # print url
 
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
     # Yet more debugging with print
-    #print
-    #print 'result of GET request to url is: '
-    #print result
+    # print
+    # print 'result of GET request to url is: '
+    # print result
 
     if result['status'] == '200':
         del login_session['access_token']
@@ -643,40 +667,42 @@ def gdisconnect():
         del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        #return response
+        # return response
         flash("You have successfully logged out")
         return redirect(url_for('indexPage'))
 
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.'), 400)
+        response = make_response(json.dumps(
+            'Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
         return response
+
 
 # Local user helper functions
 def getUserID(email):
     try:
-        user = session.query(User).filter_by(email = email).one()
+        user = session.query(User).filter_by(email=email).one()
         return user.id
     except:
         return None
 
 
 def getUserInfo(user_id):
-    user = session.query(User).filter_by(id = user_id).one()
+    user = session.query(User).filter_by(id=user_id).one()
     return user
 
 
 def createUser(login_session):
-    newUser = User(name = login_session['username'],
-        email = login_session['email'],
-        picture = login_session['picture'])
+    newUser = User(name=login_session['username'],
+                   email=login_session['email'],
+                   picture=login_session['picture'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email = login_session['email']).one()
+    user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
 
 
 if __name__ == '__main__':
     app.debug = True
     app.secret_key = 'super_secret_key'
-    app.run(host = '0.0.0.0', port = 5000)
+    app.run(host='0.0.0.0', port=5000)
