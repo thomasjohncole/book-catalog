@@ -536,7 +536,10 @@ def gconnect():
 
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
-        print credentials.to_json()
+
+        # debug statement
+        # print credentials.to_json()
+
     except FlowExchangeError:
         response = make_response(
             json.dumps('Failed to upgrade the authorization code.'), 401
@@ -588,9 +591,10 @@ def gconnect():
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
-
     data = answer.json()
-    print data
+
+    # debug statement
+    # print data
 
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
@@ -603,8 +607,9 @@ def gconnect():
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
 
-    print "The user id is:"
-    print user_id
+    # debug statements
+    # print "The user id is:"
+    # print user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -668,14 +673,29 @@ def gdisconnect():
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         # return response
+        # instead of returning response, we'll flash and redirect to index
         flash("You have successfully logged out")
         return redirect(url_for('indexPage'))
 
     else:
+        # we are only getting this condition after 1 hour token expiry
+        # so we're going to change this to just log the user out anyway
+
         response = make_response(json.dumps(
             'Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        # return response
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        # response.headers['Content-Type'] = 'application/json'
+        flash(""" You have successfully logged out, although your token was unable.
+              to be revoked, probably because it expired after one hour. Nothing to
+              worry about really, just thought I'd share.""")
+        print "token expired"
+        return redirect(url_for('indexPage'))
 
 
 # Local user helper functions
