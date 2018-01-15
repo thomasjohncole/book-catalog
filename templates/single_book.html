@@ -20,7 +20,7 @@
             <h1>{{ book.title }}</h1>
             <p class='lead'><em>{{ book.subtitle if book.subtitle is not none }}</em></p>
             <p>By <strong>{{ book.author }}</strong></p>
-            <p>and <strong>{{ book.author2 if book.author2 is not none }}</strong></p>
+            <p><strong>{{ book.author2 if book.author2 is not none }}</strong></p>
             <blockquote><p><em>{{ book.description }}</em></p></blockquote>
             <dl class="dl-horizontal">
             {% for category in categories %}
