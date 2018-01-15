@@ -691,10 +691,10 @@ def gdisconnect():
         del login_session['username']
         del login_session['email']
         del login_session['picture']
-        # response.headers['Content-Type'] = 'application/json'
+
         flash(""" You have successfully logged out, although your token was unable
-              to be revoked, probably because it expired after one hour. Nothing to
-              worry about really, just thought I'd share.""")
+              to be revoked, probably because it expired after one hour.
+              Nothing to worry about really, just thought I'd share.""")
         print "token expired"
         return redirect(url_for('indexPage'))
 
