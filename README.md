@@ -25,9 +25,13 @@ The application allows for user login using the Google OAuth method. Once logged
 
 ## How to Make It Work ##
 
-Install the virtual machine using Vagrant using the instructions found here:
+Install VirtualBox, Vagrant, and Git on the operating system of your choice.
 
-Install flask-bootstrap in the vm using the command: pip install flask-bootstrap
+Clone the repository at this link: https://github.com/udacity/fullstack-nanodegree-vm
+
+Install the virtual machine by running the command: `vagrant up`
+
+Install flask-bootstrap in the vm using the command: `pip install flask-bootstrap`
 
 Use your Google Developer credentials to generate a client_id and client_secret for the application. Then assign these values to the environment variables GOOGLE_CLIENT_SECRET, and GOOGLE_CLIENT_ID, respectively.
 
@@ -35,11 +39,11 @@ Clone the repository to the home directory of your virtual machine.
 
 CD into the application directory.
 
-Run the shell command python db_setup.py to create the database.
+Run the shell command `python db_setup.py` to create the database.
 
-Run the shell command python populator.py to add the data to the database.
+Run the shell command `python populator.py` to add the data to the database.
 
-Run the shell command python catalog.py to start the application.
+Run the shell command `python catalog.py` to start the application.
 
 Open your browser to http://localhost:5000
 
