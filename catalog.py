@@ -685,13 +685,14 @@ def gdisconnect():
             'Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
         # return response
+        # instead of returning response, just go ahead and log them out
         del login_session['access_token']
         del login_session['gplus_id']
         del login_session['username']
         del login_session['email']
         del login_session['picture']
         # response.headers['Content-Type'] = 'application/json'
-        flash(""" You have successfully logged out, although your token was unable.
+        flash(""" You have successfully logged out, although your token was unable
               to be revoked, probably because it expired after one hour. Nothing to
               worry about really, just thought I'd share.""")
         print "token expired"
