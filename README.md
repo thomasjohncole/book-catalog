@@ -1,7 +1,7 @@
 # Book Catalog 2018 #
 ## Project 4 in the Full Stack Web Developer Nanodegree ##
 
-The Book Catalog 2018 is a web application which displays information about various books by performing various SQL queries and displaying the results in a user-friendly format. Information such as author, title, category, and a breif description are displayed in the browser.
+The Book Catalog 2018 is a web application which displays information about various books by performing various SQL queries and displaying the results in a user-friendly format. Information such as author, title, category, and a brief description are displayed in the browser.
 
 This is a CRUD (Create, Read, Update, Delete) application built with the Flask web framework using Python.
 
@@ -9,9 +9,9 @@ SQLite is used as the database, and SQLAlchemy is utilized as the ORM.
 
 The project was built inside an Ubuntu 16 virtual machine using Virtualbox and Vagrant.
 
-In addition to the applications and extensions included in the Vagrantfile, flask-bootstrap was also installed manually, to facilitate CSS styling
+In addition to the applications and extensions included in the Vagrantfile, flask-bootstrap was also installed manually, to facilitate CSS styling.
 
-The application allows for user login using the Google OAuth method. Once logged in , users can add their own books and categories to the database, which will be displayed by the application.
+The application allows for user login using the Google OAuth method. Once logged in, users can add their own books and categories to the database, which will be displayed by the application.
 
 ## Files included ##
 
@@ -31,23 +31,25 @@ The application allows for user login using the Google OAuth method. Once logged
 
 3. Install the virtual machine by running the command: `vagrant up`
 
-4. Install flask-bootstrap in the vm using the command: `pip install flask-bootstrap`
+4. Connect to the virtual machine using the command: `vagrant ssh`
 
-5. Use your Google Developer credentials to generate a client_id and client_secret for the application. Then assign these values to the environment variables GOOGLE_CLIENT_SECRET, and GOOGLE_CLIENT_ID, respectively.
+5. Install flask-bootstrap in the vm using the command: `pip install flask-bootstrap`
 
-6. Clone the repository to the home directory of your virtual machine.
+6. Use your Google Developer credentials to generate a client_id and client_secret for the application. Then assign these values to the environment variables GOOGLE_CLIENT_SECRET, and GOOGLE_CLIENT_ID, respectively.
 
-7. change directories into the application directory.
+7. Clone this repository to the home directory of your virtual machine.
 
-8. Run the shell command `python db_setup.py` to create the database.
+8. Change directories into the application directory.
 
-9. Run the shell command `python populator.py` to add the data to the database.
+9. Run the shell command `python db_setup.py` to create the database.
 
-10. Run the shell command `python catalog.py` to start the application.
+10. Run the shell command `python populator.py` to add the data to the database.
 
-11. Open your browser to http://localhost:5000
+11. Run the shell command `python catalog.py` to start the application.
 
-12. Enjoy! Thanks for reviewing this project!
+12. Open your browser to http://localhost:5000
+
+13. Enjoy! Thanks for reviewing this project!
 
  
 
