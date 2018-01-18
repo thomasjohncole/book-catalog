@@ -35,7 +35,7 @@
 
             <!--- hackey way to get a prev and next button to paginate alphabetically by title...
 
-            Jinja's variable scope doesn't extend outside the for loop, but you can use an array
+            Jinja's variable scope doesn't extend outside the for loop, but you can use a list
             and append it. The new_book_id is set to an empty list first, and then we iterate through the sorted list of book.id values until we find the current book id. The loop.index keeps
             track of the iterations of the for loop, so we can use loop.index to keep track of the
             list position. If we're at the end of the list we just assign new_book_id the value of
