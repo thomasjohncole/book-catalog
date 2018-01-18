@@ -37,11 +37,11 @@ The application allows for user login using the Google OAuth method. Once logged
 
 6. Install flask-bootstrap in the virtual machine using the command: `pip install flask-bootstrap`
 
-7. Use the Google Developer's Console (https://console.developers.google.com) to generate a Client ID and Client Secret for a new web application called libro-catalog. (If you need to use a different name for the appliation, make sure to change the APPLICATION_NAME variable in line 32 of the catalog.py file)
+7. Use the Google Developer's Console (https://console.developers.google.com) to generate a Client ID and Client Secret for a new web application called libro-catalog. (If you need to use a different name for the application, make sure to change the APPLICATION_NAME variable in line 32 of the catalog.py file)
 
 8. Assign these generated values to the OS environment variables GOOGLE_CLIENT_SECRET, and GOOGLE_CLIENT_ID, respectively.
 
-9. Change directories into the application directory (fullstack-nanodegree-vm/catalog).
+9. Change directories into the application directory (/vagrant/catalog).
 
 10. Delete the existing database file with the command `rm books.db`
 
