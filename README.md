@@ -1,5 +1,4 @@
 # Book Catalog 2018 #
-## Project 4 in the Full Stack Web Developer Nanodegree ##
 
 The Book Catalog 2018 is a web application which displays information about various books by performing SQL queries and displaying the results in a user-friendly format. Information such as author, title, category, and a brief description are displayed in the browser.
 
@@ -53,7 +52,7 @@ The application allows for user login using the Google OAuth method. Once logged
 
 14. Open your browser to http://localhost:5000
 
-15. Enjoy! Thanks for reviewing this project!
+15. Also hosted on an AWS Lightsail server at http://13.250.103.155.xip.io/
 
 
 
