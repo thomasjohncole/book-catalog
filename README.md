@@ -52,7 +52,7 @@ The application allows for user login using the Google OAuth method. Once logged
 
 14. Open your browser to http://localhost:5000
 
-15. Also hosted on an AWS Lightsail server at http://13.250.103.155.xip.io/
+15. Also hosted on an AWS Lightsail server at http://13.250.103.155.nip.io/
 
 
 
